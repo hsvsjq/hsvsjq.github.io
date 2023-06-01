@@ -128,14 +128,14 @@ g_presetObj.gaugeList = {
 */
 
 /** フリーズアローのデフォルト色セットの利用有無 (true: 使用, false: 矢印色を優先してセット) */
-g_presetObj.frzColors = true;
+g_presetObj.frzColors = false;
 
 /**
   矢印色変化に対応してフリーズアロー色を追随する範囲の設定 (Normal: 通常時、Hit: ヒット時)
   ※この設定は、g_presetObj.frzColors = false もしくは
 	譜面ヘッダー：defaultFrzColorUse=false のときにのみ有効です。
 */
-//g_presetObj.frzScopeFromAC = [`Normal`, `Hit`];
+g_presetObj.frzScopeFromAC = [`Normal`];
 
 /**
   フリーズアローの始点で通常矢印の判定を行うか(dotさんソース方式)
