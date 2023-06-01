@@ -21,7 +21,7 @@
 g_presetObj.tuning = `name`;
 
 /** 譜面製作者URL */
-g_presetObj.tuningUrl = `https://www.google.co.jp/`;
+g_presetObj.tuningUrl = `https://hsvsjq.github.io/`;
 
 /** 自動横幅拡張設定 (true:有効、false:無効 / デフォルトは true) */
 //g_presetObj.autoSpread = false;
