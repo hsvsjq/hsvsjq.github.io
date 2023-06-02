@@ -68,12 +68,6 @@ g_presetObj.gauge = {
 
 /** ゲージ設定（デフォルト以外）*/
 g_presetObj.gaugeCustom = {
-	Normal: {
-		Border: 70,
-		Recovery: 4,
-		Damage: 7,
-		Init: 50,
-	},
 	Easy: {
 		Border: 70,
 		Recovery: 4,
