@@ -5,7 +5,7 @@
  *
  * Source by tickle
  * Created : 2019/11/19
- * Revised : 2023/05/25 (v32.2.1)
+ * Revised : 2023/07/17 (v32.7.0)
  *
  * https://github.com/cwtickle/danoniplus
  */
@@ -255,8 +255,11 @@ const updateWindowSiz = _ => {
         btnReverse: {
             x: 160, y: 0, w: 90, h: 21, siz: g_limitObj.difSelectorSiz, borderStyle: `solid`,
         },
+        btnExcessive: {
+            x: 5, y: 25, w: 90, h: 21, siz: g_limitObj.difSelectorSiz, borderStyle: `solid`,
+        },
         lblGauge2: {
-            x: g_limitObj.setLblLeft - 35, y: g_limitObj.setLblHeight,
+            x: g_limitObj.setLblLeft - 55, y: g_limitObj.setLblHeight,
             w: g_limitObj.setLblWidth + 60, h: g_limitObj.setLblHeight * 2, siz: 11,
         },
         lnkFadein: {
@@ -700,7 +703,7 @@ const C_KEY_TITLEBACK = 46;
 
 /** 判定系共通オブジェクト */
 const g_judgObj = {
-    arrowJ: [2, 4, 6, 8, 8],
+    arrowJ: [2, 4, 6, 8, 16],
     frzJ: [2, 4, 8]
 };
 const g_judgPosObj = {
@@ -731,6 +734,7 @@ const g_resultObj = {
 
     fast: 0,
     slow: 0,
+    excessive: 0,
 
     spState: ``,
 };
@@ -867,9 +871,11 @@ const g_autoPlaysBase = [C_FLG_OFF, C_FLG_ALL];
 
 let g_appearanceRanges = [`Hidden+`, `Sudden+`, `Hid&Sud+`];
 
+const makeSpeedList = (_minSpd, _maxSpd) => [...Array((_maxSpd - _minSpd) * 20 + 1).keys()].map(i => _minSpd + i / 20);
+
 // 設定系全般管理
 const g_settings = {
-    speeds: [...Array((C_MAX_SPEED - C_MIN_SPEED) * 20 + 1).keys()].map(i => C_MIN_SPEED + i / 20),
+    speeds: makeSpeedList(C_MIN_SPEED, C_MAX_SPEED),
     speedNum: 0,
     speedTerms: [20, 5, 1],
 
@@ -889,6 +895,9 @@ const g_settings = {
 
     gauges: [],
     gaugeNum: 0,
+
+    excessives: [C_FLG_OFF, C_FLG_ON],
+    excessiveNum: 0,
 
     autoPlays: [C_FLG_OFF, C_FLG_ALL],
     autoPlayNum: 0,
@@ -911,9 +920,11 @@ const g_settings = {
 
     opacitys: [10, 25, 50, 75, 100],
 
-    scoreDetailDefs: [`Speed`, `Density`, `ToolDif`],
+    scoreDetailDefs: [`Density`, `Speed`, `ToolDif`],
     scoreDetails: [],
     scoreDetailCursors: [],
+
+    scoreDetailTrans: [[`Velocity`, `Speed`], [`DifLevel`, `ToolDif`]],
 };
 
 g_settings.volumeNum = g_settings.volumes.length - 1;
@@ -1000,7 +1011,7 @@ let g_storeSettings = [`adjustment`, `volume`, `appearance`, `opacity`, `hitPosi
 let g_storeSettingsEx = [`d_stepzone`, `d_judgment`, `d_fastslow`, `d_lifegauge`,
     `d_score`, `d_musicinfo`, `d_filterline`];
 
-let g_canDisabledSettings = [`motion`, `scroll`, `shuffle`, `autoPlay`, `gauge`, `appearance`];
+let g_canDisabledSettings = [`motion`, `scroll`, `shuffle`, `autoPlay`, `gauge`, `excessive`, `appearance`];
 
 const g_hidSudObj = {
     filterPos: 10,
@@ -1351,6 +1362,7 @@ const g_shortcutObj = {
         ShiftLeft_KeyG: { id: `lnkGaugeL` },
         ShiftRight_KeyG: { id: `lnkGaugeL` },
         KeyG: { id: `lnkGaugeR` },
+        KeyE: { id: `lnkExcessive` },
 
         AltLeft_ShiftLeft_Semicolon: { id: `lnkAdjustmentHR` },
         AltLeft_ShiftRight_Semicolon: { id: `lnkAdjustmentHR` },
@@ -1395,13 +1407,13 @@ const g_shortcutObj = {
         KeyV: { id: `lnkVolumeR` },
 
         KeyI: { id: `btnGraph` },
-        Digit1: { id: `lnkSpeedG` },
-        Digit2: { id: `lnkDensityG` },
+        Digit1: { id: `lnkDensityG` },
+        Digit2: { id: `lnkSpeedG` },
         Digit3: { id: `lnkToolDifG` },
-        Numpad1: { id: `lnkSpeedG` },
-        Numpad2: { id: `lnkDensityG` },
+        Numpad1: { id: `lnkDensityG` },
+        Numpad2: { id: `lnkSpeedG` },
         Numpad3: { id: `lnkToolDifG` },
-        KeyQ: { id: `lnkSpeedG` },
+        KeyQ: { id: `lnkDensityG` },
         KeyP: { id: `lnkDifInfo` },
         KeyZ: { id: `btnSave` },
 
@@ -1423,13 +1435,13 @@ const g_shortcutObj = {
         ArrowUp: { id: `btnDifU` },
 
         KeyI: { id: `btnGraph` },
-        Digit1: { id: `lnkSpeedG` },
-        Digit2: { id: `lnkDensityG` },
+        Digit1: { id: `lnkDensityG` },
+        Digit2: { id: `lnkSpeedG` },
         Digit3: { id: `lnkToolDifG` },
-        Numpad1: { id: `lnkSpeedG` },
-        Numpad2: { id: `lnkDensityG` },
+        Numpad1: { id: `lnkDensityG` },
+        Numpad2: { id: `lnkSpeedG` },
         Numpad3: { id: `lnkToolDifG` },
-        KeyQ: { id: `lnkSpeedG` },
+        KeyQ: { id: `lnkDensityG` },
         KeyP: { id: `lnkDifInfo` },
 
         Escape: { id: `btnBack` },
@@ -1575,6 +1587,7 @@ const g_cssObj = {
     main_stepShakin: `main_stepShakin`,
     main_stepMatari: `main_stepMatari`,
     main_stepShobon: `main_stepShobon`,
+    main_stepExcessive: `main_stepExcessive`,
 
     main_objStepShadow: `main_objStepShadow`,
     main_objShadow: `main_objShadow`,
@@ -1715,7 +1728,7 @@ const g_keyObj = {
     color14i_0_0: [2, 2, 2, 3, 3, 3, 3, 0, 1, 0, 2, 0, 1, 0],
     color15A_0_0: [3, 3, 3, 3, 4, 4, 4, 4, 0, 1, 0, 2, 0, 1, 0],
     color16i_0_0: [2, 2, 2, 3, 3, 3, 3, 1, 0, 1, 0, 2, 0, 1, 0, 1],
-    color17_0_0: [0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 4, 3, 4, 3, 4, 3, 4],
+    color17_0_0: [1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1],
     color23_0_0: [3, 3, 3, 3, 4, 4, 4, 4, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0],
 
     color5_1_0: [2, 0, 0, 0, 0],
@@ -1732,7 +1745,7 @@ const g_keyObj = {
 
     // ColorGroup - 2
     color9B_0_1: [4, 3, 1, 0, 2, 0, 1, 3, 4],
-    color17_0_1: [1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1],
+    color17_0_1: [0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 4, 3, 4, 3, 4, 3, 4],
 
     color17_1_1: [1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 
@@ -1753,20 +1766,20 @@ const g_keyObj = {
     shuffle7_0_0: [0, 0, 0, 1, 0, 0, 0],
     shuffle7i_0_0: [0, 0, 0, 1, 1, 1, 1],
     shuffle8_0_0: [0, 0, 0, 1, 0, 0, 0, 2],
-    shuffle9A_0_0: [0, 0, 0, 0, 1, 2, 2, 2, 2],
+    shuffle9A_0_0: [0, 0, 0, 0, 1, 0, 0, 0, 0],
     shuffle9B_0_0: [0, 0, 0, 0, 1, 0, 0, 0, 0],
     shuffle9i_0_0: [0, 0, 0, 0, 1, 1, 1, 1, 1],
     shuffle11_0_0: [0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 1],
     shuffle11L_0_0: [0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 1],
     shuffle11W_0_0: [0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 1],
-    shuffle11i_0_0: [0, 0, 1, 0, 0, 2, 3, 3, 4, 3, 3],
+    shuffle11i_0_0: [0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0],
     shuffle12_0_0: [0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2],
     shuffle13_0_0: [0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 3, 3, 3],
     shuffle14_0_0: [0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2],
     shuffle14i_0_0: [0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 2, 2, 2],
     shuffle15A_0_0: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 2, 2, 2],
     shuffle16i_0_0: [0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 2, 2, 2, 2],
-    shuffle17_0_0: [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+    shuffle17_0_0: [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     shuffle23_0_0: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 4, 4, 4, 4, 4, 4],
 
     shuffle5_1_0: [1, 0, 0, 0, 0],
@@ -1778,12 +1791,12 @@ const g_keyObj = {
     shuffle8_2_0: [1, 0, 0, 0, 0, 0, 0, 0],
 
     // ShuffleGroup - 2
-    shuffle9A_0_1: [0, 0, 0, 0, 1, 0, 0, 0, 0],
+    shuffle9A_0_1: [0, 0, 0, 0, 1, 2, 2, 2, 2],
     shuffle11_0_1: [0, 0, 0, 0, 1, 1, 1, 2, 3, 3, 3],
     shuffle11L_0_1: [0, 0, 0, 0, 1, 1, 1, 2, 3, 3, 3],
-    shuffle11i_0_1: [0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0],
+    shuffle11i_0_1: [0, 0, 1, 0, 0, 2, 3, 3, 4, 3, 3],
     shuffle15A_0_1: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4],
-    shuffle17_0_1: [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    shuffle17_0_1: [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2],
     shuffle23_0_1: [0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2],
 
     shuffle17_1_1: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -2300,9 +2313,6 @@ const g_titleLists = {
     /** タイトルのデフォルトフォント */
     defaultFonts: [`'メイリオ'`],
 
-    /** グラデーション関連初期リスト */
-    grdList: [`titlegrd`, `titlearrowgrd`],
-
     /** タイトル用アニメーションの設定種 */
     animation: [`Name`, `Duration`, `Delay`, `TimingFunction`],
 
@@ -2612,6 +2622,7 @@ const g_lblNameObj = {
     Shuffle: `Shuffle`,
     AutoPlay: `AutoPlay`,
     Gauge: `Gauge`,
+    Excessive: `Excessive`,
     Adjustment: `Adjustment`,
     Fadein: `Fadein`,
     Volume: `Volume`,
@@ -2632,11 +2643,12 @@ const g_lblNameObj = {
     g_border: `Border`,
     g_recovery: `Recovery`,
     g_damage: `Damage`,
+    g_rate: `Accuracy`,
 
-    s_speed: `Speed`,
+    s_speed: `Overall`,
     s_boost: `Boost`,
     s_avg: `Avg.`,
-    s_avgDspeed: `AvgS)`,
+    s_avgDspeed: `AvgO)`,
     s_avgDboost: `AvgB)`,
 
     s_apm: `APM`,
@@ -2714,9 +2726,9 @@ const g_lblNameObj = {
     'u_Sudden+': `Sudden+`,
     'u_Hid&Sud+': `Hid&Sud+`,
 
-    'u_Speed': `Speed`,
+    'u_Speed': `Velocity`,
     'u_Density': `Density`,
-    'u_ToolDif': `ToolDif`,
+    'u_ToolDif': `DifLevel`,
 
     'u_Main': `Main`,
     'u_Replaced': `Replaced`,
@@ -2801,6 +2813,7 @@ const g_lang_lblNameObj = {
         j_iknai: "(・A・)ｲｸﾅｲ",
 
         j_adj: `推定Adj`,
+        j_excessive: `Excessive`,
 
         helpUrl: `https://github.com/cwtickle/danoniplus/wiki/AboutGameSystem`,
         securityUrl: `https://github.com/cwtickle/danoniplus/security/policy`,
@@ -2833,6 +2846,7 @@ const g_lang_lblNameObj = {
         j_iknai: ":( N.G.",
 
         j_adj: `Est-Adj.`,
+        j_excessive: `Excessive`,
 
         helpUrl: `https://github.com/cwtickle/danoniplus-docs/wiki/AboutGameSystem`,
         securityUrl: `https://github.com/cwtickle/danoniplus-docs/wiki/SecurityPolicy`,
@@ -2868,12 +2882,13 @@ const g_lang_msgObj = {
         scroll: `各レーンのスクロール方向をパターンに沿って設定します。\nReverse:ONでスクロール方向を反転します。`,
         shuffle: `譜面を左右反転したり、ランダムにします。\nランダムにした場合は別譜面扱いとなり、ハイスコアは保存されません。`,
         autoPlay: `オートプレイや一部キーを自動で打たせる設定を行います。\nオートプレイ時はハイスコアを保存しません。`,
-        gauge: `クリア条件を設定します。\n[Start] ゲージ初期値, [Border] クリア条件(ハイフン時は0),\n[Recovery] 回復量, [Damage] ダメージ量`,
+        gauge: `クリア条件を設定します。\n[Start] ゲージ初期値, [Border] クリア条件(ハイフン時は0),\n[Recovery] 回復量, [Damage] ダメージ量, [Accuracy] クリアに必要な正確率(オンマウスで許容ミス数表示)`,
+        excessive: `空押し判定を行うか設定します。`,
         adjustment: `曲とのタイミングにズレを感じる場合、\n数値を変えることでフレーム単位のズレを直すことができます。\n外側のボタンは5f刻み、真ん中は1f刻み、内側は0.5f刻みで調整できます。`,
         fadein: `譜面を途中から再生します。\n途中から開始した場合はハイスコアを保存しません。`,
         volume: `ゲーム内の音量を設定します。`,
 
-        graph: `速度変化や譜面密度状況、\n譜面の難易度など譜面の詳細情報を表示します。`,
+        graph: `譜面密度や速度変化状況、\n譜面の難易度などの情報を表示します。`,
         dataSave: `ハイスコア、リバース設定、\nキーコンフィグの保存の有無を設定します。`,
         toDisplay: `プレイ画面上のオブジェクトの\n表示・非表示（一部透明度）を設定します。`,
         toSettings: `SETTINGS画面へ戻ります。`,
@@ -2924,12 +2939,13 @@ const g_lang_msgObj = {
         scroll: `Set the scroll direction for each lane according to the pattern.\nIf "Reverse:ON" sets, reverse the scroll direction.`,
         shuffle: `Flip the chart left and right or make it random.\nIf you make it random, it will be treated as other charts and the high score will not be saved.`,
         autoPlay: `Set to auto play and to hit some keys automatically.\nHigh score is not saved during auto play.`,
-        gauge: `Set the clear condition.\n[Start] initial value, [Border] borderline value (hyphen means zero),\n[Recovery] recovery amount, [Damage] damage amount`,
+        gauge: `Set the clear condition.\n[Start] initial value, [Border] borderline value (hyphen means zero),\n[Recovery] recovery amount, [Damage] damage amount,\n[Accuracy] accuracy required to clear (mouseover to see the number of allowed mistakes)`,
+        excessive: `Set whether to use excessive miss judgment.`,
         adjustment: `If you feel that the timing is out of sync with the music, \nyou can correct the shift in frame units by changing the value.\nThe outer button can be adjusted in 5 frame increments, the middle in 1 frame increments, \nand the inner button in 0.5 frame increments.`,
         fadein: `Plays the chart from the middle.\nIf you start in the middle, the high score will not be saved.`,
         volume: `Set the in-game volume.`,
 
-        graph: `Displays detailed information about the chart, such as sequences' speed changes, chart's density status, and chart's difficulty.`,
+        graph: `Displays detailed information about the chart, such as chart's density status, sequences' velocity changes, and chart's difficulty.`,
         dataSave: `Set whether to save the high score, reverse setting, and key config.`,
         toDisplay: `Set the display or non-display (partial transparency) of objects on the play screen.`,
         toSettings: `Return to the SETTINGS screen.`,
