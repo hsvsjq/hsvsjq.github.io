@@ -1,7 +1,7 @@
 ﻿'use strict';
 /**
  * Dancing☆Onigiri 設定用jsファイル
- * Template Update: 2023/06/24 (v32.5.0)
+ * Template Update: 2024/01/28 (v35.0.0)
  * 
  * このファイルでは、作品全体に対しての初期設定を行うことができます。
  * 譜面データ側で個別に同様の項目が設定されている場合は、譜面データ側の設定が優先されます。
@@ -29,6 +29,12 @@ g_presetObj.tuningUrl = `https://www.google.co.jp/`;
 /** 個人サイト別の最小横幅設定 */
 //g_presetObj.autoMinWidth = 600;
 
+/** 個人サイト別の最小高さ設定 */
+//g_presetObj.autoMinHeight = 500;
+
+/** 個人サイト別の高さ可変設定 (true: 有効、false: 無効 / デフォルトは false)*/
+//g_presetObj.heightVariable = true;
+
 /** 個人サイト別のウィンドウ位置 (left:左寄せ, center:中央, right:右寄せ)*/
 //g_presetObj.windowAlign = `center`;
 
@@ -41,6 +47,9 @@ g_presetObj.tuningUrl = `https://www.google.co.jp/`;
 
 /** 既定スキン (デフォルトは default) */
 g_presetObj.skinType = `default`;
+
+/** skinTypeがdefaultのとき、Canvas背景を有効にするかどうかのフラグ (デフォルトは有効(true)。falseで無効化) */
+//g_presetObj.bgCanvasUse = false;
 
 /** 既定カスタムJs (デフォルトは danoni_custom.js) */
 //g_presetObj.customJs = `danoni_custom.js,danoni_init.js`;
@@ -115,9 +124,9 @@ g_presetObj.gaugeList = {
 
 /**
   空押し判定を行うか
-  判定させる場合は `true` を指定
+  判定させる場合は true を指定
 */
-g_presetObj.excessiveJdgUse = `false`;
+g_presetObj.excessiveJdgUse = false;
 
 
 /*
@@ -139,9 +148,9 @@ g_presetObj.frzColors = true;
 
 /**
   フリーズアローの始点で通常矢印の判定を行うか(dotさんソース方式)
-  判定させる場合は `true` を指定
+  判定させる場合は true を指定
 */
-g_presetObj.frzStartjdgUse = `false`;
+g_presetObj.frzStartjdgUse = false;
 
 /*
 ------------------------------------------------------------------------
@@ -151,14 +160,14 @@ g_presetObj.frzStartjdgUse = `false`;
 */
 
 // デフォルトのデザインを使用せず、独自のデザインを使用するかを指定
-// カスタムデザインにする場合は `true` を指定
+// カスタムデザインにする場合は true を指定
 g_presetObj.customDesignUse = {
-	title: `false`,
-	titleArrow: `false`,
-	titleAnimation: `false`,
-	back: `false`,
-	backMain: `false`,
-	ready: `false`,
+	title: false,
+	titleArrow: false,
+	titleAnimation: false,
+	back: false,
+	backMain: false,
+	ready: false,
 };
 
 /**
@@ -212,6 +221,7 @@ g_presetObj.customDesignUse = {
 /**
   オプション利用設定（デフォルト）
   一律使用させたくない場合は `false` を指定（デフォルトは `true`）
+  Display設定の場合は `true,OFF`(設定は有効だが初期値はOFF)といったことができる
 */
 g_presetObj.settingUse = {
 	motion: `true`,
@@ -274,6 +284,28 @@ g_presetObj.stockForceDelList = {
 	mask: [],
 };
 
+/**
+ * ショートカットキーが既定と異なる場合に表示する
+ * ショートカットキーエリア用に、プレイ時のみ左右に拡張するサイズの設定
+ * - 表示内容が収まるサイズは80px
+ * - 下記のplayingLayoutの設定により拡張幅が変わる (center: 左右両方拡張, left: 右のみ拡張)
+ */
+//g_presetObj.scAreaWidth = 80;
+
+/**
+ * プレイ画面の表示レイアウト (既定: center)
+ * - 現状影響する範囲は「scAreaWidth」の設定のみ
+ */
+//g_presetObj.playingLayout = `left`;
+
+/**
+ * プレイ画面の位置調整
+ * - 譜面ヘッダーのplayingX, playingY, playingWidth, playingHeightと同じ
+ */
+//g_presetObj.playingX = 0;
+//g_presetObj.playingY = 0;
+//g_presetObj.playingWidth = 600;
+//g_presetObj.playingHeight = 500;
 
 /*
 ------------------------------------------------------------------------
@@ -313,6 +345,11 @@ g_presetObj.resultVals = {
 	// exScore: `exScore`,
 };
 
+/* 
+	リザルトカスタムデータの表示設定
+	g_presetObj.resultVals から、リザルト画像データに表示したい項目を列挙します。
+ */
+//g_presetObj.resultValsView = [`exScore`];
 
 /*
 ------------------------------------------------------------------------

@@ -5,7 +5,7 @@
  *
  * Source by tickle
  * Created : 2019/11/19
- * Revised : 2023/07/17 (v32.7.0)
+ * Revised : 2024/01/28 (v35.0.0)
  *
  * https://github.com/cwtickle/danoniplus
  */
@@ -96,7 +96,7 @@ const g_limitObj = {
 
     // 判定キャラクタの幅、高さ、フォントサイズ
     jdgCharaWidth: 200,
-    jdgCharaHeight: 20,
+    jdgCharaHeight: 22,
     jdgCharaSiz: 20,
 
     // 判定数の幅、高さ、フォントサイズ
@@ -112,7 +112,7 @@ const g_limitObj = {
     titleSiz: 32,
     mainSiz: 14,
     musicTitleSiz: 13,
-    keySetSiz: 16,
+    keySetSiz: 15,
 };
 
 /** 設定項目の位置 */
@@ -153,9 +153,6 @@ const g_userAgent = window.navigator.userAgent.toLowerCase(); // msie, edge, chr
 const g_isIos = listMatching(g_userAgent, [`iphone`, `ipad`, `ipod`]);
 const g_isMac = listMatching(g_userAgent, [`iphone`, `ipad`, `ipod`, `mac os`]);
 
-const g_isFile = location.href.match(/^file/);
-const g_isLocal = location.href.match(/^file/) || location.href.indexOf(`localhost`) !== -1;
-
 // 変数型
 const C_TYP_BOOLEAN = `boolean`;
 const C_TYP_NUMBER = `number`;
@@ -170,19 +167,14 @@ const C_TYP_CALC = `calc`;
 let [g_sWidth, g_sHeight] = [
     setVal($id(`canvas-frame`).width, 500, C_TYP_FLOAT), setVal($id(`canvas-frame`).height, 500, C_TYP_FLOAT)
 ];
-$id(`canvas-frame`).width = `${g_sWidth}px`;
+$id(`canvas-frame`).width = `${Math.max(g_sWidth, 500)}px`;
+$id(`canvas-frame`).height = `${Math.max(g_sHeight, 500)}px`;
 $id(`canvas-frame`).margin = `auto`;
 
 // 固定ウィンドウサイズ
 const g_windowObj = {
     divRoot: { margin: `auto`, letterSpacing: `normal` },
     divBack: { background: `linear-gradient(#000000, #222222)` },
-
-    difList: { x: 165, y: 60, w: 280, h: 261, overflow: `auto` },
-    difCover: { x: 25, y: 60, w: 140, h: 261, overflow: `auto`, opacity: 0.95 },
-
-    scoreDetail: { x: 20, y: 85, w: 420, h: 236, visibility: `hidden` },
-    detailObj: { w: 420, h: 230, visibility: `hidden` },
 
     colorPickSprite: { x: 0, y: 90, w: 50, h: 280 },
 };
@@ -192,12 +184,17 @@ const g_lblPosObj = {};
 // 可変部分のウィンドウサイズを更新
 const updateWindowSiz = _ => {
     Object.assign(g_windowObj, {
-        optionSprite: { x: (g_sWidth - 450) / 2, y: 65 + (g_sHeight - 500) / 2, w: 450, h: 325 },
+        optionSprite: { x: (g_sWidth - 450) / 2, y: 65, w: 450, h: 325 },
+        difList: { x: 165, y: 60, w: 280, h: 261 + g_sHeight - 500, overflow: `auto` },
+        difCover: { x: 25, y: 60, w: 140, h: 261 + g_sHeight - 500, opacity: 0.95 },
+        difFilter: { x: 0, y: 61, w: 140, h: 200 + g_sHeight - 500, overflow: `auto` },
         displaySprite: { x: 25, y: 30, w: (g_sWidth - 450) / 2, h: g_limitObj.setLblHeight * 5 },
-        keyconSprite: { y: 88 + (g_sHeight - 500) / 2, h: g_sHeight, overflow: `auto` },
+        scoreDetail: { x: 20, y: 85, w: (g_sWidth - 500) / 2 + 420, h: 236, visibility: `hidden` },
+        detailObj: { w: (g_sWidth - 500) / 2 + 420, h: 230, visibility: `hidden` },
+        keyconSprite: { y: 88, h: g_sHeight, overflow: `auto` },
         loader: { y: g_sHeight - 10, h: 10, backgroundColor: `#333333` },
-        playDataWindow: { x: g_sWidth / 2 - 225, y: 70 + (g_sHeight - 500) / 2, w: 450, h: 110 },
-        resultWindow: { x: g_sWidth / 2 - 200, y: 185 + (g_sHeight - 500) / 2, w: 400, h: 210 },
+        playDataWindow: { x: g_sWidth / 2 - 225, y: 70, w: 450, h: 110 },
+        resultWindow: { x: g_sWidth / 2 - 200, y: 185, w: 400, h: 210 },
     });
 
     Object.assign(g_lblPosObj, {
@@ -296,7 +293,7 @@ const updateWindowSiz = _ => {
             x: 130, y: 70, w: 200, h: 90,
         },
         dataArrowInfo2: {
-            x: 140, y: 70, w: 275, h: 150, overflow: `auto`,
+            x: 140, y: 70, w: (g_sWidth - 500) / 2 + 275, h: 150, overflow: `auto`,
         },
         lnkDifInfo: {
             w: g_limitObj.difCoverWidth, borderStyle: `solid`,
@@ -382,26 +379,32 @@ const updateWindowSiz = _ => {
             x: -8, y: -8, w: C_ARW_WIDTH + 16, h: C_ARW_WIDTH + 16,
         },
         lblCredit: {
-            x: 125, y: g_sHeight - 30, w: g_headerObj.playingWidth - 125, h: 20, align: C_ALIGN_LEFT,
+            x: 125, y: g_headerObj.playingHeight - 30, w: g_headerObj.playingWidth - 125, h: 20, align: C_ALIGN_LEFT,
         },
         lblDifName: {
-            x: 125, y: g_sHeight - 16, w: g_headerObj.playingWidth, h: 20, align: C_ALIGN_LEFT,
+            x: 125, y: g_headerObj.playingHeight - 16, w: g_headerObj.playingWidth, h: 20, align: C_ALIGN_LEFT,
         },
         lblTime1: {
-            x: 18, y: g_sHeight - 30, w: 40, h: 20, siz: g_limitObj.mainSiz, align: C_ALIGN_RIGHT,
+            x: 18, y: g_headerObj.playingHeight - 30, w: 40, h: 20, siz: g_limitObj.mainSiz, align: C_ALIGN_RIGHT,
         },
         lblTime2: {
-            x: 60, y: g_sHeight - 30, w: 60, h: 20, siz: g_limitObj.mainSiz,
+            x: 60, y: g_headerObj.playingHeight - 30, w: 60, h: 20, siz: g_limitObj.mainSiz,
         },
         lblWord: {
             x: 100, w: g_headerObj.playingWidth - 200, h: 50,
             siz: g_limitObj.mainSiz, align: C_ALIGN_LEFT, display: `block`, margin: `auto`,
         },
         finishView: {
-            x: g_headerObj.playingWidth / 2 - 150, y: g_sHeight / 2 - 50, w: 300, h: 20, siz: 50,
+            x: g_headerObj.playingWidth / 2 - 150, y: g_headerObj.playingHeight / 2 - 50, w: 300, h: 20, siz: 50,
         },
         musicInfoOFF: {
             x: 20, animationDuration: `4.0s`, animationName: `leftToRightFade`, animationFillMode: `both`,
+        },
+        lblMainScHeader: {
+            x: g_sWidth + g_headerObj.scAreaWidth - 85, w: 80, h: 20, siz: 12, align: C_ALIGN_RIGHT,
+        },
+        lblMainScKey: {
+            x: g_sWidth + g_headerObj.scAreaWidth - 85, w: 80, h: 20, siz: 12, align: C_ALIGN_RIGHT,
         },
 
         /** 結果画面 */
@@ -409,7 +412,7 @@ const updateWindowSiz = _ => {
             x: 340, y: 160, w: 70, h: 20, siz: 50, align: C_ALIGN_CENTER,
         },
         lblResultPre: {
-            x: g_sWidth / 2 - 150, y: g_sHeight / 2 - 160, w: 200, h: 50, siz: 60, opacity: 0,
+            x: g_sWidth / 2 - 150, y: 90, w: 200, h: 50, siz: 60, opacity: 0,
         },
         lblResultPre2: {
             x: g_sWidth / 2 + 50, y: 40, w: 200, h: 30, siz: 20,
@@ -430,6 +433,15 @@ const updateWindowSiz = _ => {
         },
         btnRsRetry: {
             x: g_sWidth / 4 * 3, w: g_sWidth / 4, h: g_limitObj.btnHeight * 5 / 4, animationName: `smallToNormalY`,
+        },
+        btnRsCopyImage: {
+            x: g_sWidth - 40, y: 0, w: 40, h: 40, siz: 30,
+        },
+        btnRsCopyClose: {
+            x: g_sWidth - 80, y: 0, w: 80, h: 40, siz: 20,
+        },
+        resultImageDesc: {
+            x: 0, y: g_sHeight - 30, w: g_sWidth, h: 20, siz: g_limitObj.mainSiz,
         },
     });
 };
@@ -465,6 +477,7 @@ let C_IMG_CURSOR = `../img/cursor.svg`;
 let C_IMG_FRZBAR = `../img/frzbar.svg`;
 let C_IMG_LIFEBAR = `../img/frzbar.svg`;
 let C_IMG_LIFEBORDER = `../img/borderline.svg`;
+let C_IMG_TITLE_ARROW;
 
 if (typeof loadBinary === C_TYP_FUNCTION) {
     loadBinary();
@@ -573,6 +586,8 @@ const reloadImgObj = _ => {
     g_imgObj.frzBar = C_IMG_FRZBAR;
     g_imgObj.lifeBar = C_IMG_LIFEBAR;
     g_imgObj.lifeBorder = C_IMG_LIFEBORDER;
+
+    g_imgObj.titleArrow = C_IMG_TITLE_ARROW;
 };
 reloadImgObj();
 
@@ -762,6 +777,10 @@ const g_rankObj = {
     rankColorF: `#999999`,
     rankMarkX: `X`,
     rankColorX: `#996600`
+};
+
+const g_templateObj = {
+    resultFormatDf: `【#danoni[hashTag]】[musicTitle]([keyLabel]) /[maker] /Rank:[rank]/Score:[score]/Playstyle:[playStyle]/[arrowJdg]/[frzJdg]/[maxCombo] [url]`,
 };
 
 const g_pointAllocation = {
@@ -1013,6 +1032,13 @@ let g_storeSettingsEx = [`d_stepzone`, `d_judgment`, `d_fastslow`, `d_lifegauge`
 
 let g_canDisabledSettings = [`motion`, `scroll`, `shuffle`, `autoPlay`, `gauge`, `excessive`, `appearance`];
 
+const g_hidSudFunc = {
+    filterPos: _filterPos => `${_filterPos}${g_lblNameObj.percent}`,
+    range: _ => `${Math.round(g_posObj.arrowHeight - g_posObj.stepY)}px`,
+    hidden: _filterPos => `${Math.min(Math.round(g_posObj.arrowHeight * (100 - _filterPos) / 100), g_posObj.arrowHeight - g_posObj.stepY)}`,
+    sudden: _filterPos => `${Math.max(Math.round(g_posObj.arrowHeight * (100 - _filterPos) / 100) - g_posObj.stepY, 0)}`,
+};
+
 const g_hidSudObj = {
     filterPos: 10,
 
@@ -1043,6 +1069,15 @@ const g_hidSudObj = {
         'Sudden+': { OFF: 1, ON: 0, },
         'Hid&Sud+': { OFF: 1, ON: 0, },
     },
+    distH: {
+        'Visible': _ => ``,
+        'Hidden': _ => `${g_hidSudFunc.filterPos(50)} (${g_hidSudFunc.hidden(50)} / ${g_hidSudFunc.range()})`,
+        'Hidden+': (_filterPos) => `${g_hidSudFunc.filterPos(_filterPos)} (${g_hidSudFunc.hidden(_filterPos)} / ${g_hidSudFunc.range()})`,
+        'Sudden': _ => `${g_hidSudFunc.filterPos(40)} (${g_hidSudFunc.sudden(40)} / ${g_hidSudFunc.range()})`,
+        'Sudden+': (_filterPos) => `${g_hidSudFunc.filterPos(_filterPos)} (${g_hidSudFunc.sudden(_filterPos)} / ${g_hidSudFunc.range()})`,
+        'Hid&Sud+': (_filterPos) => `${g_hidSudFunc.filterPos(_filterPos)} (${Math.max(g_hidSudFunc.sudden(_filterPos)
+            - (g_posObj.arrowHeight - g_posObj.stepY - g_hidSudFunc.hidden(_filterPos)), 0)} / ${g_hidSudFunc.range()})`,
+    },
 };
 
 // ステップゾーン位置、到達距離(後で指定)
@@ -1069,12 +1104,65 @@ let g_currentk = 0;
 let g_prevKey = -1;
 
 // キーコード
-const g_kCd = [];
+const g_kCd = {};
 const g_kCdN = [];
 for (let j = 0; j < 260; j++) {
     g_kCd[j] = ``;
     g_kCdN[j] = ``;
 }
+
+const g_lang_kCd = {
+    Ja: {
+        48: `0`,
+        49: `1`,
+        50: `2`,
+        51: `3`,
+        52: `4`,
+        53: `5`,
+        54: `6`,
+        55: `7`,
+        56: `8`,
+        57: `9`,
+        186: `： *`,
+        187: `; +`,
+        188: `, <`,
+        189: `- =`,
+        190: `. >`,
+        191: `/ ?`,
+        192: "@ `",
+        219: `[ {`,
+        220: `\\ |`,
+        221: `] }`,
+        222: `^ ~`,
+        226: `\\ _`,
+        229: `IME`,
+    },
+    En: {
+        48: `0 )`,
+        49: `1 !`,
+        50: `2 @`,
+        51: `3 #`,
+        52: `4 $`,
+        53: `5 %`,
+        54: `6 ^`,
+        55: `7 &`,
+        56: `8 *`,
+        57: `9 (`,
+        186: `' "`,
+        187: `; :`,
+        188: `, <`,
+        189: `- _`,
+        190: `. >`,
+        191: `/ ?`,
+        192: `[ {`,
+        219: `] }`,
+        220: `IntlYen`,
+        221: `\\ |`,
+        222: `= +`,
+        226: `IntlRo`,
+        229: "` ~",
+    },
+};
 
 // キー表示用
 g_kCd[0] = `- - -`;
@@ -1103,16 +1191,6 @@ g_kCd[44] = `PS`;
 g_kCd[45] = `Insert`;
 g_kCd[46] = `Delete`;
 g_kCd[47] = `Help`;
-g_kCd[48] = `0`;
-g_kCd[49] = `1`;
-g_kCd[50] = `2`;
-g_kCd[51] = `3`;
-g_kCd[52] = `4`;
-g_kCd[53] = `5`;
-g_kCd[54] = `6`;
-g_kCd[55] = `7`;
-g_kCd[56] = `8`;
-g_kCd[57] = `9`;
 g_kCd[65] = `A`;
 g_kCd[66] = `B`;
 g_kCd[67] = `C`;
@@ -1175,23 +1253,12 @@ g_kCd[126] = `F15`;
 g_kCd[134] = `FN`;
 g_kCd[144] = `NumLk`;
 g_kCd[145] = `SL`;
-g_kCd[186] = `： *`;
-g_kCd[187] = `; +`;
-g_kCd[188] = `, <`;
-g_kCd[189] = `- =`;
-g_kCd[190] = `. >`;
-g_kCd[191] = `/ ?`;
-g_kCd[192] = "@ `";
-g_kCd[219] = `[ {`;
-g_kCd[220] = `\\ |`;
-g_kCd[221] = `] }`;
-g_kCd[222] = `^ ~`;
-g_kCd[226] = `\\ _`;
-g_kCd[229] = `IME`;
 g_kCd[240] = `CapsLk`;
 g_kCd[256] = `R)Shift`;
 g_kCd[257] = `R)Ctrl`;
 g_kCd[258] = `R)Alt`;
+g_kCd[259] = `Window`;
+g_kCd[260] = `R-Shift`;
 
 // 従来のキーコードとの変換用
 g_kCdN[0] = `- - -`; // 無効値
@@ -1310,12 +1377,20 @@ g_kCdN[256] = `ShiftRight`;
 g_kCdN[257] = `ControlRight`;
 g_kCdN[258] = `AltRight`;
 g_kCdN[259] = `MetaRight`;
+g_kCdN[260] = ``;
 
 const g_kCdNameObj = {
     shiftLKey: `ShiftLeft`,
     shiftRKey: `ShiftRight`,
     metaLKey: `MetaLeft`,
     metaRKey: `MetaRight`,
+    unknownKey: `Unknown`,
+};
+
+const g_kCdObj = {
+    unknown: 1,
+    shiftRkey: 256,
+    shiftRAltKey: 260,
 };
 
 // 画面別ショートカット
@@ -1522,6 +1597,7 @@ const g_shortcutObj = {
         KeyC: { id: `btnCopy`, reset: true },
         KeyT: { id: `btnTweet`, reset: true },
         KeyG: { id: `btnGitter`, reset: true },
+        KeyP: { id: `btnCopyImage` },
         Backspace: { id: `btnRetry` },
     },
 };
@@ -1613,6 +1689,13 @@ const g_cssObj = {
     common_combo: `common_combo`,
     common_score: `common_score`,
 
+    common_comboJ: `common_comboJ`,
+    common_comboFJ: `common_comboFJ`,
+    common_diffSlow: `common_diffSlow`,
+    common_diffFast: `common_diffFast`,
+    common_excessive: `common_excessive`,
+    common_estAdj: `common_estAdj`,
+
     result_score: `result_score`,
     result_scoreHiBlanket: `result_scoreHiBlanket`,
     result_scoreHi: `result_scoreHi`,
@@ -1657,6 +1740,7 @@ const g_keyObj = {
     // - 原則、キー×パターンの数だけ設定が必要
     currentKey: 7,
     currentPtn: 0,
+    storagePtn: 0,
     defaultProp: `keyCtrl`,
 
     prevKey: `Dummy`,
@@ -2318,15 +2402,33 @@ const g_titleLists = {
 
 };
 
-const g_animationData = [`back`, `mask`];
+const g_animationData = [`back`, `mask`, `style`];
+const g_animationFunc = {
+    make: {
+        back: makeSpriteData,
+        mask: makeSpriteData,
+        style: makeStyleData,
+    },
+    draw: {
+        back: drawSpriteData,
+        mask: drawSpriteData,
+        style: drawStyleData,
+    },
+    drawMain: {
+        back: drawMainSpriteData,
+        mask: drawMainSpriteData,
+        style: drawMainStyleData,
+    },
+};
 
-let g_fadeinStockList = [`word`, `back`, `mask`];
+let g_fadeinStockList = [`word`, `back`, `mask`, `style`];
 
 /** フェードイン時でもプリロードを除外しないリスト */
 const g_preloadExceptList = {
     word: [`[left]`, `[center]`, `[right]`],
     back: [],
     mask: [],
+    style: [],
 };
 
 /** フェードイン時、プリロードを強制削除するリスト（初期値は空） */
@@ -2334,6 +2436,7 @@ const g_stockForceDelList = {
     word: [],
     back: [],
     mask: [],
+    style: [],
 };
 
 /**
@@ -2353,6 +2456,7 @@ const g_dataMinObj = {
     word: 3,
     mask: 1,
     back: 1,
+    style: 1,
 };
 
 const g_dfColorObj = {
@@ -2366,6 +2470,8 @@ const g_dfColorObj = {
     frzShadowColorInit: [``, ``, ``, ``],
 
 };
+
+const g_cssBkProperties = {};
 
 const g_dfColorBaseObj = {
 
@@ -2613,6 +2719,7 @@ const g_lblNameObj = {
     b_tweet: `Tweet`,
     b_gitter: `Gitter`,
     b_retry: `Retry`,
+    b_close: `Close`,
 
     Difficulty: `Difficulty`,
     Speed: `Speed`,
@@ -2793,6 +2900,7 @@ const g_lang_lblNameObj = {
         kcShortcutDesc: `プレイ中ショートカット：「{0}」タイトルバック / 「{1}」リトライ`,
         transKeyDesc: `別キーモードではキーコンフィグ、ColorType等は保存されません`,
         sdShortcutDesc: `Hid+/Sud+時ショートカット：「pageUp」カバーを上へ / 「pageDown」下へ`,
+        resultImageDesc: `画像を右クリックしてコピーできます`,
 
         s_level: `Level`,
         s_douji: `同時補正`,
@@ -2815,6 +2923,9 @@ const g_lang_lblNameObj = {
         j_adj: `推定Adj`,
         j_excessive: `Excessive`,
 
+        l_retry: `リトライ`,
+        l_titleBack: `タイトルバック`,
+
         helpUrl: `https://github.com/cwtickle/danoniplus/wiki/AboutGameSystem`,
         securityUrl: `https://github.com/cwtickle/danoniplus/security/policy`,
     },
@@ -2826,6 +2937,7 @@ const g_lang_lblNameObj = {
         kcShortcutDesc: `Shortcut during play: "{0}" Return to title / "{1}" Retry the game`,
         transKeyDesc: `Key config, Color type, etc. are not saved in another key mode`,
         sdShortcutDesc: `When "Hidden+" or "Sudden+" select, "pageUp" cover up / "pageDown" cover down`,
+        resultImageDesc: `You can copy the image by right-clicking on it.`,
 
         s_level: `Level`,
         s_douji: `Chords`,
@@ -2847,6 +2959,9 @@ const g_lang_lblNameObj = {
 
         j_adj: `Est-Adj.`,
         j_excessive: `Excessive`,
+
+        l_retry: `Retry`,
+        l_titleBack: `Go to title`,
 
         helpUrl: `https://github.com/cwtickle/danoniplus-docs/wiki/AboutGameSystem`,
         securityUrl: `https://github.com/cwtickle/danoniplus-docs/wiki/SecurityPolicy`,
