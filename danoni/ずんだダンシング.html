@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<script src="../js/danoni_main.js"></script>
+
+<title>Dancing★Onigiri ずんだダンシング</title>
+
+<style type="text/css">
+<!--//
+a:link   { color:#BAB7E0;}
+a:visited{ color:#BAB7E0;}
+a:active { color:#CCCCCC;}
+body{
+	font-family:"Arial","メイリオ","MS P ゴシック",sans-serif;
+	scrollbar-base-color:"black";
+	scrollbar-arrow-color:"white";
+	color:#cccccc;
+	background-color:#000011;
+	font-size:14px;
+}
+table{
+	border:0;
+	border-collapse:collapse;
+	width:800px;
+	margin:auto;
+}
+th,td{padding:0;}
+
+a{ text-decoration: none; }
+a:hover  { color:#FF9900; text-decoration: underline; }
+
+//-->
+</style>
+</head>
+
+<body>
+<table><tr><td>
+<hr>
+
+<!--//
+
+・タイトルの文字サイズを変える場合
+|titlesize=60|
+・タイトルの文字フォントを変える場合
+|titlefont=Century Gothic|
+
+//-->
+<input type="hidden" name="dos" id="dos" value='
+
+|musicTitle=ずんだダンシング,namigroove,https://www.youtube.com/@namigroove|
+|tuning=hsvsj|
+|difData=33o,33o,6,x,1,15,50|
+|gaugeHeavy=x,5,100,30|
+|gaugeLight=x,1,10,100|
+|startFrame=0|
+|musicUrl=ずんだダンシング.mp3|
+|titleanimation=upToDown,120|
+
+|keyCtrl33o=49,D2,D3,D4,Q,W,E,R,A,S,D,F,Z,X,C,V,Space,N,M,Comma,Period,J,K,L,Semicolon,I,O,P,BracketLeft,D9,D0,Minus,Equal|
+|pos33o=0,1,2,3,0.5,1.5,2.5,3.5,1,2,3,4,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,7,8,9,10,7.5,8.5,9.5,10.5,8,9,10,11|
+|stepRtn33o=onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri,onigiri|
+|color33o=3,3,3,3,4,4,4,4,1,1,1,1,0,0,0,0,2,0,0,0,0,1,1,1,1,4,4,4,4,3,3,3,3|
+|shuffle33o=0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8|
+|chara33o=aleft,adown,aup,aright,bleft,bdown,bup,bright,cleft,cdown,cup,cright,dleft,ddown,dup,dright,space,eleft,edown,eup,eright,fleft,fdown,fup,fright,gleft,gdown,gup,gright,hleft,hdown,hup,hright|
+|keyRetry=ControlRight|
+
+|scroll33o=Flat::1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1|
+|keyGroup33o=0/1,0/1,0/1,0/1,0/2,0/2,0/2,0/2,0/3,0/3,0/3,0/3,0/4,0/4,0/4,0/4,0/4,0/4,0/4,0/4,0/4,0/3,0/3,0/3,0/3,0/2,0/2,0/2,0/2,0/1,0/1,0/1,0/1|
+|keyGroupOrder33o=1,2,3,4|
+
+|aleft_data=1590,1609,2194,2239,3120,3377,3699,3705,3724,3737|adown_data=227,330,1436,1449,1622,1950,1963,2002,2220,2542,2670,2850,2889,2914,2940,3082,3352,3454,3467,3718|aup_data=1976,1989,2201,2233,2516,2856,3094,3384,3666|aright_data=202,208,221,304,311,324,1642,1654,2226,2490,2683,2863,3107,3126,3358,3647,3654,3673,3750|bleft_data=266,292,369,394,716,729,767,780,1024,1031,1089,1783,1873,1886,2027,2445,2593,3043,3184|bdown_data=433,510,516,529,742,754,896,1056,1095,1256,1359,1372,1564,1577,1931,2053,2149,2182,2259,2387,2439,2464,2586,2696,2966,3036,3152,3178,3197,3326,3493,3499,3576,3596,3602,3622,3763,3776|bup_data=240,253,343,722,735,774,786,799,1044,1063,1076,1102,1230,1236,1249,1462,1474,1789,1847,1860,1899,1937,2046,2143,2156,2169,2400,2426,2458,2580,2651,2812,2837,2972,3030,3146,3172,3210,3551,3564,3570,3615|bright_data=279,356,382,407,414,426,536,549,748,761,793,806,870,876,889,1050,1069,1082,1333,1339,1352,1667,1680,1918,1944,2021,2040,2136,2188,2246,2413,2452,2574,2651,2709,2824,2979,3165,3332,3486,3583,3776|cleft_data=459,484,819,844,947,973,1282,1307,1532,1738,2124,2349,2773,2799|cdown_data=562,690,703,857,922,954,966,1114,1179,1192,1732,1770,2079,2104,2329,2342,2355,2368,2632,2722,2741,2779,2792,2992,3223,3242,3262,3300|cup_data=497,565,613,639,652,915,960,1121,1153,1166,1320,1526,1539,1552,1725,1744,2072,2111,2336,2362,2374,2606,2747,2760,2786,2998,3236,3255|cright_data=446,472,568,626,664,677,832,909,934,1127,1140,1204,1217,1269,1294,1487,1506,1693,1712,2066,2092,2117,2284,2310,2381,2734,2754,2766,3004,3011,3229,3249,3268,3306|dleft_data=|ddown_data=|dup_data=|dright_data=1757|space_data=3776|eleft_data=1757|edown_data=|eup_data=|eright_data=|fleft_data=394,420,497,536,574,716,729,767,780,857,883,986,1024,1037,1102,1114,1230,1256,1320,1487,1506,1693,1712,1931,2008,2529,2619,2799,2812,2818,2953,3004,3030,3036,3274,3313,3622,3654,3679,3750|fdown_data=510,542,793,806,909,1050,1063,1326,1519,1539,1552,1744,1937,1950,1989,2002,2284,3011,3024,3281,3647,3660,3686,3724,3731|fup_data=446,523,742,754,1076,1089,1269,1333,1770,1944,1956,1969,1982,1995,2014,2310,2516,2632,2824,2837,2953,3017,3287,3609,3641,3666,3692,3712|fright_data=407,433,549,870,896,979,1243,1346,1738,1963,1976,3628,3673,3699|gleft_data=202,227,304,330,356,362,375,459,465,478,652,664,690,819,825,838,947,960,1153,1166,1192,1359,1372,1667,1680,1866,1912,2034,2136,2188,2246,2503,2567,2644,2927,2979,3184,3223,3339,3390,3480,3544,3557,3596,3776|gdown_data=292,613,619,645,658,684,1127,1140,1185,1204,1282,1288,1301,1462,1474,1789,1847,1860,1873,1886,2143,2156,2169,2336,2349,2355,2561,2644,2657,2747,2760,2766,2985,3056,3062,3172,3197,3474,3589|gup_data=382,484,632,677,844,922,928,941,1159,1172,1198,1217,1307,1365,1378,1564,1577,1854,1879,1892,2149,2182,2259,2362,2374,2490,2542,2554,2657,2773,2786,2927,2992,3049,3210,3249,3255,3493,3499,3551,3583,3763,3776|gright_data=214,240,317,343,639,671,1134,1146,1179,1211,1783,1899,2040,3043,3229,3403,3416,3429,3442,3454,3467,3570|hleft_data=253,259,272,1642,1654,2053,2066,2226,2458,2477,2670,2902,3126,3364|hdown_data=1629,2079,2092,2201,2233,2387,2400,2406,2452,2696,2869,3107,3120|hup_data=279,1436,1449,2104,2220,2445,2464,2722,2902,3082,3094|hright_data=1590,1609,1635,2124,2194,2239,2413,2426,2876,3146,3152|afrzLeft_data=1397,1436|afrzDown_data=|afrzUp_data=|afrzRight_data=|bfrzLeft_data=|bfrzDown_data=1809,1847|bfrzUp_data=|bfrzRight_data=1809,1847|cfrzLeft_data=574,613|cfrzDown_data=|cfrzUp_data=986,1024|cfrzRight_data=986,1024|dfrzLeft_data=|dfrzDown_data=|dfrzUp_data=|dfrzRight_data=|frzSpace_data=|efrzLeft_data=|efrzDown_data=|efrzUp_data=|efrzRight_data=|ffrzLeft_data=|ffrzDown_data=986,1024|ffrzUp_data=|ffrzRight_data=574,613|gfrzLeft_data=1809,1847|gfrzDown_data=|gfrzUp_data=1809,1847|gfrzRight_data=|hfrzLeft_data=|hfrzDown_data=|hfrzUp_data=|hfrzRight_data=1397,1436|speed_data=202,1.0
+
+'>
+<div id="canvas-frame" style="width: 800px; margin: auto; height: 500;">
+	<p>ゲームを準備しています...</p>
+	<p>このメッセージがいつまでも消えない場合、<br>
+		Google ChromeやFirefox等、HTML5に対応したブラウザをご利用ください。</p>
+</div>
+<hr>
+<br><br><br><br>
+<img src="33o.jpg" style="width:500px;">
+<p id="commentArea">
+</p>
+</td></tr></table>
+</body>
+</html>
