@@ -57,17 +57,14 @@
             
             if(paramChartDiffId){
                 supabase.from('score').select('*').eq('chartDiffId', paramChartDiffId).range(lowerBound, upperBound).then((result) => {
-                    console.log(result)
                     tabulateData(result.data, 'score')
                 })
             }else if (paramChartId){
                 supabase.from('chartDiff').select('*').eq('chartId', paramChartId).range(lowerBound, upperBound).then((result) => {
-                    console.log(result)
                     tabulateData(result.data, 'chartDiff')
                 })
             }else{
                 supabase.from('chart').select('*').range(lowerBound, upperBound).then((result) => {
-                    console.log(result)
                     tabulateData(result.data, 'chart')
                 })
             }
@@ -106,7 +103,6 @@
                         if(entry[0] == 'id'){
                             if(idHref)
                                 c.setAttribute('href', location.protocol + "//" + location.host + location.pathname + '?RowQty=' + rowCount + idHref + entry[1])
-                            console.log(child)
                         }
                         child.appendChild(c)
                         row.appendChild(child)
