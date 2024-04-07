@@ -147,7 +147,7 @@
 
 
                 q.then((result) => {
-                    tabulateData(result.data, {'name': ['chart', 'creatorName']})
+                    tabulateData(result.data, {'name': ['chart', 'creatorName'], 'website' : [null, null]})
                 })
             }else if (paramTable == 'score'){
                 const q = supabase.from('score').select().range(lowerBound, upperBound)
