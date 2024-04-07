@@ -3,13 +3,12 @@ function rowQtyChanged(){
     
     const rowQty = document.getElementById('row_qty') 
     const urlParams = new URLSearchParams(window.location.search);
-    const paramChartDiffId = urlParams.get("chartDiffId")
-    const paramChartId = urlParams.get("chartId")
-
+    const paramTable = urlParams.get("table")
+    const paramQuery = urlParams.get("query")
+    
     var url = location.protocol + '//' + location.host + location.pathname + '?RowQty=' + rowQty.value
-    if(paramChartDiffId) url += '&chartDiffId=' + paramChartDiffId
-    if(paramChartId) url += '&chartId=' + paramChartId
-
+    if(paramTable) url += '&table=' + paramTable
+    if(paramQuery) url += '&query=' + paramQuery
 
     window.location.href = url
     
@@ -47,14 +46,23 @@ function pageRight(){
 
 function changePage(page){
     const urlParams = new URLSearchParams(window.location.search);
-    const paramChartDiffId = urlParams.get("chartDiffId")
-    const paramChartId = urlParams.get("chartId")
+    const paramTable = urlParams.get("table")
+    const paramQuery = urlParams.get("query")
+
     const paramRowQty = urlParams.get("RowQty")
     
     var url = location.protocol + '//' + location.host + location.pathname + '?page=' + page
-    if(paramChartDiffId) url += '&chartDiffId=' + paramChartDiffId
-    if(paramChartId) url += '&chartId=' + paramChartId
     if(paramRowQty) url += '&RowQty=' + paramRowQty
+    if(paramTable) url += '&table=' + paramTable
+    if(paramQuery) url += '&query=' + paramQuery
+
     window.location.href = url
     
+}
+
+function currentTable(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramTable = urlParams.get("table")
+    var url = location.protocol + '//' + location.host + location.pathname + '?table=' + paramTable
+    window.location.href = url
 }
