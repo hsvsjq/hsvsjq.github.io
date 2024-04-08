@@ -53,8 +53,8 @@
             const paramRegister = urlParams.get("register")
             if (paramRegister){
                 const su = createClient('https://sjylbgbijbteoivtkgks.supabase.co', urlParams.get("key"))
-                su.from('player').insert({name: urlParams.get("username")}).select().then(result => {
-                    su.from('playerPassword').insert({playerId: result.data.id, password: urlParams.get("password")}).then()
+                su.from('player').insert({"name": urlParams.get("username")}).select().then(result => {
+                    su.from('playerPassword').insert({"playerId": result.data[0].id, "password": urlParams.get("password")}).then(r => {})
                 })
             }
 
