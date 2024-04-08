@@ -49,15 +49,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const paramTable = urlParams.get("table")
             const paramQuery = urlParams.get("query")
-
-            const paramRegister = urlParams.get("register")
-            if (paramRegister){
-                const su = createClient('https://sjylbgbijbteoivtkgks.supabase.co', urlParams.get("key"))
-                su.from('player').insert({"name": urlParams.get("username")}).select().then(result => {
-                    su.from('playerPassword').insert({"playerId": result.data[0].id, "password": urlParams.get("password")}).then(r => {})
-                })
-            }
-
             
             const paramRowQty = urlParams.get("RowQty")
             if(paramRowQty) rowQty.value = paramRowQty
