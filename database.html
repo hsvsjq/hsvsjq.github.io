@@ -43,14 +43,21 @@
 
             const tableHeader = document.getElementById('table_header_row') 
             const tableBody = document.getElementById('table_body') 
-            const rowQty = document.getElementById('row_qty') 
+            const rowQty = document.getElementById('row_qty')
 
             //params
             const urlParams = new URLSearchParams(window.location.search);
-            const paramTable =  urlParams.get("table")
+            const paramTable = urlParams.get("table")
             const paramQuery = urlParams.get("query")
 
-            //const paramUserId = urlParams.get("userId") TODO
+            const paramRegister = urlParams.get("register")
+            if (paramRegister){
+                const su = createClient('https://sjylbgbijbteoivtkgks.supabase.co', urlParams.get("key"))
+                su.from('player').insert({name: urlParams.get("username")}).select().then(result => {
+                    su.from('playerPassword').insert({playerId: result.data.id, password: urlParams.get("password")}).then()
+                })
+            }
+
             
             const paramRowQty = urlParams.get("RowQty")
             if(paramRowQty) rowQty.value = paramRowQty
@@ -180,56 +187,56 @@
             }
             
             
-            function tabulateData(data, hrefs){
-                clearTable()
-                if (data.length <= 0) return
+        function tabulateData(data, hrefs){
+            clearTable()
+            if (data.length <= 0) return
 
-                Object.keys(data[0]).forEach(element => {
-                    const child = document.createElement('th')
-                    child.innerHTML = element 
-                    tableHeader.appendChild(child)
-                });
-                data.forEach(element => {
-                    const row = document.createElement('tr')
-                    Object.entries(element).forEach(entry => {
-                        const child = document.createElement('td')
-                        const c = document.createElement('a')
-                        c.innerHTML = entry[1]
-                        
-                        //set hrefs
-                        Object.entries(hrefs).forEach(href => {
-                            if (entry[0] == href[0]) {
-                                var base = location.protocol + "//" + location.host + location.pathname
-                                if(href[1][0])
-                                    base += '?RowQty=' + rowCount + '&table=' + href[1][0] + '&' + href[1][1] + '=' + entry[1]
-                                else
-                                    base = entry[1]
-                                    
+            Object.keys(data[0]).forEach(element => {
+                const child = document.createElement('th')
+                child.innerHTML = element 
+                tableHeader.appendChild(child)
+            });
+            data.forEach(element => {
+                const row = document.createElement('tr')
+                Object.entries(element).forEach(entry => {
+                    const child = document.createElement('td')
+                    const c = document.createElement('a')
+                    c.innerHTML = entry[1]
+                    
+                    //set hrefs
+                    Object.entries(hrefs).forEach(href => {
+                        if (entry[0] == href[0]) {
+                            var base = location.protocol + "//" + location.host + location.pathname
+                            if(href[1][0])
+                                base += '?RowQty=' + rowCount + '&table=' + href[1][0] + '&' + href[1][1] + '=' + entry[1]
+                            else
+                                base = entry[1]
                                 
-                                c.setAttribute('href', base)
-                            }
-                        })
-
-
-                        
-                        
-                        child.appendChild(c)
-                        row.appendChild(child)
+                            
+                            c.setAttribute('href', base)
+                        }
                     })
 
-                    tableBody.appendChild(row)
-                });
-            }
 
-            function clearTable(){
-                removeAllChildNodes(tableHeader)
-                removeAllChildNodes(tableBody)
-            }
+                    
+                    
+                    child.appendChild(c)
+                    row.appendChild(child)
+                })
 
-            function removeAllChildNodes(parent) {
-                while (parent.firstChild) 
-                    parent.removeChild(parent.firstChild);
-            }
+                tableBody.appendChild(row)
+            });
+        }
+
+        function clearTable(){
+            removeAllChildNodes(tableHeader)
+            removeAllChildNodes(tableBody)
+        }
+
+        function removeAllChildNodes(parent) {
+            while (parent.firstChild) 
+                parent.removeChild(parent.firstChild);
+        }
 
             
         </script>
