@@ -46,16 +46,16 @@ function pageRight(){
 
 function changePage(page){
     const urlParams = new URLSearchParams(window.location.search);
-    const paramTable = urlParams.get("table")
-    const paramQuery = urlParams.get("query")
-
-    const paramRowQty = urlParams.get("RowQty")
     
-    var url = location.protocol + '//' + location.host + location.pathname + '?page=' + page
-    if(paramRowQty) url += '&RowQty=' + paramRowQty
-    if(paramTable) url += '&table=' + paramTable
-    if(paramQuery) url += '&query=' + paramQuery
+    var params = ''
+    for (const [key, value] of urlParams.entries()) {
+        if(key == 'page') continue;
+        params += '&' + key + '=' + value
 
+    }
+        
+    var url = location.protocol + '//' + location.host + location.pathname + '?page=' + page + params
+    
     window.location.href = url
     
 }
