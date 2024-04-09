@@ -2,13 +2,9 @@ function rowQtyChanged(){
     console.log("row quantity changed")
     
     const rowQty = document.getElementById('row_qty') 
-    const urlParams = new URLSearchParams(window.location.search);
-    const paramTable = urlParams.get("table")
-    const paramQuery = urlParams.get("query")
     
-    var url = location.protocol + '//' + location.host + location.pathname + '?RowQty=' + rowQty.value
-    if(paramTable) url += '&table=' + paramTable
-    if(paramQuery) url += '&query=' + paramQuery
+    var params = generateParams(['rowQty'])
+    var url = location.protocol + '//' + location.host + location.pathname + '?rowQty=' + rowQty.value + '&' + params
 
     window.location.href = url
     
@@ -42,19 +38,34 @@ function pageRight(){
     changePage(page + 1)
 }
 
-//TODO unify and organize address generations
-
-function changePage(page){
+function generateParams(ignore){
     const urlParams = new URLSearchParams(window.location.search);
-    
-    var params = ''
+    params = ''
+    var b = false
     for (const [key, value] of urlParams.entries()) {
-        if(key == 'page') continue;
-        params += '&' + key + '=' + value
+        for(i = 0; i < ignore.length; i++){
+            if(ignore[i] == key){
+                b = delete ignore[i]
+                break;
+            }
+        }
+        
+        if(b){
+            b = false
+            continue;
+        }
+
+        params += key + '=' + value + '&'
 
     }
+    return params
+}
+
+function changePage(page){    
+    var params = generateParams(['page'])
+    
         
-    var url = location.protocol + '//' + location.host + location.pathname + '?page=' + page + params
+    var url = location.protocol + '//' + location.host + location.pathname + '?page=' + page + '&' + params
     
     window.location.href = url
     
@@ -63,6 +74,7 @@ function changePage(page){
 function currentTable(){
     const urlParams = new URLSearchParams(window.location.search);
     const paramTable = urlParams.get("table")
-    var url = location.protocol + '//' + location.host + location.pathname + '?table=' + paramTable
+    const rowQty = document.getElementById('row_qty') 
+    var url = location.protocol + '//' + location.host + location.pathname + '?table=' + paramTable + '&rowQty=' + rowQty.value
     window.location.href = url
 }
