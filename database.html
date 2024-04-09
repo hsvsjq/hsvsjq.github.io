@@ -71,7 +71,7 @@
                 const paramName = urlParams.get("name")
 
                 if(paramQuery)
-                    q.like('name', '%' + paramQuery + '%')
+                    q.ilike('name', '%' + paramQuery + '%')
                 else if (paramName)
                     q.eq('name', paramName)
                     
@@ -86,7 +86,7 @@
                 const paramName = urlParams.get("name")
 
                 if(paramQuery)
-                    q.like('name', '%' + paramQuery + '%')
+                    q.ilike('name', '%' + paramQuery + '%')
                 else if(paramArtistName)
                     q.eq('artistName', paramArtistName)
                 else if(paramName)
@@ -105,7 +105,7 @@
                 const paramId = urlParams.get("id")
 
                 if(paramQuery)
-                    q.like('chartName', '%' + paramQuery + '%')
+                    q.ilike('chartName', '%' + paramQuery + '%')
                 else if (paramKeyName)
                     q.eq('keyName', paramKeyName)
                 else if(paramSongName)
@@ -125,7 +125,7 @@
                 const paramName = urlParams.get("name")
 
                 if(paramQuery)
-                    q.like('name', '%' + paramQuery + '%')
+                    q.ilike('name', '%' + paramQuery + '%')
                 else if(paramName)
                     q.eq('name', paramName)
 
@@ -139,7 +139,7 @@
                 const paramName = urlParams.get("name")
 
                 if(paramQuery)
-                    q.like('name', '%' + paramQuery + '%')
+                    q.ilike('name', '%' + paramQuery + '%')
                 else if(paramName)
                     q.eq('name', paramName)
 
@@ -167,7 +167,7 @@
                 const paramId = urlParams.get("id")
 
                 if(paramQuery)
-                    q.like('name', '%' + paramQuery + '%')
+                    q.ilike('name', '%' + paramQuery + '%')
                 else if(paramId)
                     q.eq('id', paramId)
 
