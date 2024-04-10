@@ -78,3 +78,10 @@ function currentTable(){
     var url = location.protocol + '//' + location.host + location.pathname + '?table=' + paramTable + '&rowQty=' + rowQty.value
     window.location.href = url
 }
+
+function search(){
+    const seachInput = document.getElementById('seach_input') 
+    params = generateParams(['query'])
+    var url = location.protocol + '//' + location.host + location.pathname + '?query=' + seachInput.value + '&' + params
+    window.location.href = url
+}
