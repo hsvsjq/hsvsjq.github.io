@@ -117,7 +117,7 @@
                     
                 
                 q.then((result) => {
-                    tabulateData(result.data, {'id': ['score', 'chartId'], 'artistName': ['song', 'artistName'], 'keyName':['key', 'name'], 'songName': ['song', 'name'], 'creatorName': ['creator', 'name'], 'link': [null, null]})
+                    tabulateData(result.data, {'id': ['leaderboard', 'chartId'], 'artistName': ['song', 'artistName'], 'keyName':['key', 'name'], 'songName': ['song', 'name'], 'creatorName': ['creator', 'name'], 'link': [null, null]})
                 })
             }else if (paramTable == 'key'){
                 const q = supabase.from('key').select().range(lowerBound, upperBound)
@@ -174,6 +174,19 @@
 
                 q.then((result) => {
                     tabulateData(result.data, {'id': ['score', 'playerId']})
+                })
+            }else if (paramTable == 'leaderboard'){
+                const q = supabase.from('leaderboard').select().range(lowerBound, upperBound)
+
+                const paramChartId = urlParams.get("chartId")
+
+                if(paramQuery)
+                    q.ilike('name', '%' + paramQuery + '%')
+                else if(paramChartId)
+                    q.eq('chartId', paramChartId)
+
+                q.then((result) => {
+                    tabulateData(result.data, {'playerId': ['player', 'id'], 'chartId' : ['chart', 'id'], 'keyName' : ['key', 'name']})
                 })
             }
             
