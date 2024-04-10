@@ -85,3 +85,12 @@ function searchInput(){
     var url = location.protocol + '//' + location.host + location.pathname + '?query=' + seachInput.value + '&' + params
     window.location.href = url
 }
+
+var seachInput = document.getElementById("search_input");
+
+seachInput.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    searchInput()
+  }
+});
