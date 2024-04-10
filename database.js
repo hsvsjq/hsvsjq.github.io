@@ -79,8 +79,8 @@ function currentTable(){
     window.location.href = url
 }
 
-function search(){
-    const seachInput = document.getElementById('seach_input') 
+function searchInput(){
+    const seachInput = document.getElementById('search_input') 
     params = generateParams(['query'])
     var url = location.protocol + '//' + location.host + location.pathname + '?query=' + seachInput.value + '&' + params
     window.location.href = url
