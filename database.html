@@ -157,8 +157,9 @@
                 const paramChartId = urlParams.get("chartId")
                 const paramPlayerId = urlParams.get("playerId")
                 const paramRank = urlParams.get("rank")
-
-                if(paramChartId)
+                if(paramQuery)
+                    q.ilike('songName', '%' + paramQuery + '%')
+                else if(paramChartId)
                     q.eq('chartId', paramChartId)
                 else if(paramPlayerId)
                     q.eq('playerId', paramPlayerId)
