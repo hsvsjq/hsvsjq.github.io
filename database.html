@@ -201,13 +201,13 @@
                     q.eq('id', paramId)
 
                 q.then((result) => {
-                    tabulateData(result.data, {'id': ['score', 'playerId']})
+                    tabulateData(result.data, {'id': ['scoreView', 'playerId']})
                 })
             }else if (paramTable == 'rank'){
                 const q = supabase.from('rank').select()
 
                 q.then((result) => {
-                    tabulateData(result.data, {'name': ['score', 'rank']})
+                    tabulateData(result.data, {'name': ['scoreView', 'rank']})
                 })
             }else if (paramTable == 'leaderboard'){
                 const q = supabase.from('leaderboard').select().range(lowerBound, upperBound)
