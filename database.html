@@ -11,7 +11,7 @@
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=chart">charts</a>
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=creator">creators</a>
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=score">scores</a>
-            <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=player">players</a>
+            <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=playerLeaderboard">players</a>
         </div>
         <div class="row justify-content-center mt-5">
             <div class="col-10">
@@ -164,6 +164,15 @@
                 q.then((result) => {
                     tabulateData(result.data, {'chartId': ['chart', 'id'], 'playerId' :['player', 'id']})
                 })
+            }else if (paramTable == 'playerLeaderboard'){
+                const q = supabase.from('playerleaderboard').select().range(lowerBound, upperBound)
+                
+                if(paramQuery)
+                    q.ilike('name', '%' + paramQuery + '%')
+
+                q.then((result) => {
+                    tabulateData(result.data, {'playerId': ['player', 'id']})
+                })
             }else if (paramTable == 'player'){
                 const q = supabase.from('player').select().range(lowerBound, upperBound)
                 
@@ -173,7 +182,6 @@
                     q.ilike('name', '%' + paramQuery + '%')
                 else if(paramId)
                     q.eq('id', paramId)
-
 
                 q.then((result) => {
                     tabulateData(result.data, {'id': ['score', 'playerId']})
