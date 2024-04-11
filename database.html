@@ -155,11 +155,14 @@
                 
                 const paramChartId = urlParams.get("chartId")
                 const paramPlayerId = urlParams.get("playerId")
+                const paramRank = urlParams.get("rank")
 
                 if(paramChartId)
                     q.eq('chartId', paramChartId)
                 else if(paramPlayerId)
                     q.eq('playerId', paramPlayerId)
+                else if(paramRank)
+                    q.eq('rank', paramRank)
 
                 q.then((result) => {
                     tabulateData(result.data, {'chartId': ['chart', 'id'], 'playerId' :['player', 'id']})
@@ -171,7 +174,7 @@
                     q.ilike('name', '%' + paramQuery + '%')
 
                 q.then((result) => {
-                    tabulateData(result.data, {'playerId': ['player', 'id']})
+                    tabulateData(result.data, {'playerId': ['player', 'id'], 'points' : ['rank', '']})
                 })
             }else if (paramTable == 'player'){
                 const q = supabase.from('player').select().range(lowerBound, upperBound)
@@ -185,6 +188,12 @@
 
                 q.then((result) => {
                     tabulateData(result.data, {'id': ['score', 'playerId']})
+                })
+            }else if (paramTable == 'rank'){
+                const q = supabase.from('rank').select()
+
+                q.then((result) => {
+                    tabulateData(result.data, {'name': ['score', 'rank']})
                 })
             }else if (paramTable == 'leaderboard'){
                 const q = supabase.from('leaderboard').select().range(lowerBound, upperBound)
