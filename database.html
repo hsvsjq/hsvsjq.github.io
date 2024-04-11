@@ -11,7 +11,8 @@
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=chart">charts</a>
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=creator">creators</a>
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=score">scores</a>
-            <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=playerLeaderboard">players</a>
+            <a class="col-1 border" href="https://hsvsjq.github.io/database.html?table=playerLeaderboard">lb</a>
+            <a class="col-1 border" href="https://hsvsjq.github.io/database.html?table=playerLeaderboardPerKey">lb per key</a>
         </div>
         <div class="row justify-content-center mt-5">
             <div class="col-10">
@@ -175,6 +176,19 @@
 
                 q.then((result) => {
                     tabulateData(result.data, {'playerId': ['player', 'id'], 'points' : ['rank', '']})
+                })
+            }else if(paramTable == 'playerLeaderboardPerKey'){
+                const q = supabase.from('playerleaderboardperkey').select().range(lowerBound, upperBound)
+
+                const paramKeyName = urlParams.get("keyName")
+
+                if(paramQuery)
+                    q.ilike('name', '%' + paramQuery + '%')
+                else if(paramKeyName)
+                    q.eq('keyName', paramKeyName)
+
+                q.then((result) => {
+                    tabulateData(result.data, {'playerId': ['player', 'id'], 'points' : ['rank', ''], 'keyName': ['playerLeaderboardPerKey', 'keyName']})
                 })
             }else if (paramTable == 'player'){
                 const q = supabase.from('player').select().range(lowerBound, upperBound)
