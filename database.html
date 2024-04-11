@@ -10,7 +10,7 @@
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=song">songs</a>
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=chart">charts</a>
             <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=creator">creators</a>
-            <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=score">scores</a>
+            <a class="col-2 border" href="https://hsvsjq.github.io/database.html?table=scoreView">scores</a>
             <a class="col-1 border" href="https://hsvsjq.github.io/database.html?table=playerLeaderboard">lb</a>
             <a class="col-1 border" href="https://hsvsjq.github.io/database.html?table=playerLeaderboardPerKey">lb per key</a>
         </div>
@@ -151,8 +151,8 @@
                 q.then((result) => {
                     tabulateData(result.data, {'name': ['chart', 'creatorName'], 'website' : [null, null]})
                 })
-            }else if (paramTable == 'score'){
-                const q = supabase.from('score').select().range(lowerBound, upperBound)
+            }else if (paramTable == 'scoreView'){
+                const q = supabase.from('scoreview').select().range(lowerBound, upperBound)
                 
                 const paramChartId = urlParams.get("chartId")
                 const paramPlayerId = urlParams.get("playerId")
