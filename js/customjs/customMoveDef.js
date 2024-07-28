@@ -293,7 +293,7 @@ function customMoveInit(){
 	currentEvents.clear()
 
 	//maybe theres an easier way to find the arrival frame
-	arrivalFrame = g_workObj.arrivalFrame.find(x => x);
+	arrivalFrame = g_workObj.mkArrow.find(f => f != null)[0].arrivalFrame
 
 
 	//observe arrow creation
