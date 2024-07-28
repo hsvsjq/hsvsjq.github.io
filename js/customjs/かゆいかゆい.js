@@ -490,6 +490,8 @@ styleSheet.textContent = `
 //[[arrowHitHint, animationFunction]] format
 const arrowHitHintCurrentAnimationMap = new Map([]);
 
+var arrivalFrame = 0
+
 var currentArrowHitHintAnimationEvents = 0;
 var arrowHitHintAnimationEvents = [];
 var currentArrowPathAnimationClassIndex = 0;
@@ -526,11 +528,15 @@ function customMainInit() {
 	currentArrowHitHintAnimationEvents = 0;
 	currentArrowPathAnimationClassIndex = 0;
 	
+	//for some reason i cant access g_workObj.arrivalFrames so 
+	//  screw motion options :fire:
+	arrivalFrame = g_workObj.mkArrow.find(f => f != null)[0].arrivalFrame
+
 	//observe when a arrow is created and put the animation class in it
 	const arrowCreationObserver = new MutationObserver(
 		(mutationList, observer) => {
 			while(arrowPathAnimationEvents.length > currentArrowPathAnimationClassIndex &&
-				(arrowPathAnimationEvents[currentArrowPathAnimationClassIndex].frameNumber - g_workObj.arrivalFrame[g_scoreObj.frameNum - 1] + 1) <= g_scoreObj.baseFrame){
+				(arrowPathAnimationEvents[currentArrowPathAnimationClassIndex].frameNumber - arrivalFrame) <= g_scoreObj.baseFrame){
 					currentArrowPathAnimationClassIndex++;	
 			}
 			for(const mutation of mutationList){
