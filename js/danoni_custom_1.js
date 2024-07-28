@@ -469,6 +469,24 @@ const points = new Map([
 	["de_28", new Point(423.579, 383.079, 1, 0)],
 ]);
 
+
+var styleSheet = document.createElement("style")
+styleSheet.textContent = `
+	#stepHit0 { top: -15px !important; left: -15px !important; }
+	[id^="arrow0_"] { top: 0px !important; left: 0px !important; }
+
+	.arrowMoviment {
+	animation-name: arrow-moviment;
+	animation-timing-function: linear, step-end;
+	animation-fill-mode: forwards;
+	}
+
+	@keyframes arrow-moviment {
+	0%   {transform: translate(var(--arrow-start-x) , var(--arrow-start-y));}
+	100% {transform: translate(var(--arrow-end-x)   , var(--arrow-end-y));}
+	}
+`
+
 //[[arrowHitHint, animationFunction]] format
 const arrowHitHintCurrentAnimationMap = new Map([]);
 
@@ -481,7 +499,10 @@ var maskObjects = [];
 //g_attrObj[`arrow0${arrowCnts[0]}`]  make past arrows not be affected by ArrowPathAnimationEvent event
 function customMainInit() {
 
-	if (g_keyObj.currentKey != '1') { return; }
+	if (g_keyObj.currentKey != '1') { 
+		styleSheet.remove()
+		return; 
+	}
 
 /* 
 	//apoi my beloved :place_of_worship:
@@ -498,22 +519,6 @@ function customMainInit() {
 		g_cxtDeleteFlg.btnReverse = true
 	})
  */
-	var styleSheet = document.createElement("style")
-	styleSheet.textContent = `
-		#stepHit0 { top: -15px !important; left: -15px !important; }
-		[id^="arrow0_"] { top: 0px !important; left: 0px !important; }
-
-		.arrowMoviment {
-		animation-name: arrow-moviment;
-		animation-timing-function: linear, step-end;
-		animation-fill-mode: forwards;
-		}
-
-		@keyframes arrow-moviment {
-		0%   {transform: translate(var(--arrow-start-x) , var(--arrow-start-y));}
-		100% {transform: translate(var(--arrow-end-x)   , var(--arrow-end-y));}
-		}
-	`
 	document.head.appendChild(styleSheet)
 
 	g_stateObj.reverse = "OFF";
