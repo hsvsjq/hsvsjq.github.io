@@ -1,0 +1,74 @@
+/**
+ * 18tkey用CSS adapted from the
+ * 9tkey用CSS
+ */
+
+:root {
+  /** JS側から操作する変数 */
+  --18t-center-x: 0px; /* ステップゾーンの中心座標(x) */
+  --18t-center-y: 0px; /* ステップゾーンの中心座標(y) */
+  --18t-max-scale: 3;  /* 矢印が最大時の拡大率 */
+}
+
+/* ヒット時のエフェクトがズレないようにする */
+.step18t div[id^="stepHit"] {
+  top: -10px !important;
+}
+
+/* ステップゾーンとノーツの表示位置 */
+#stepRoot0.step18t, .arrow18t[id^="arrow0_"], .arrow18t-rev[id^="arrow0_"] { top: calc(var(--18t-center-y) - 150px) !important; left: calc(var(--18t-center-x) - 300px) !important; }
+#stepRoot1.step18t, .arrow18t[id^="arrow1_"], .arrow18t-rev[id^="arrow1_"] { top: calc(var(--18t-center-y) - 150px) !important; left: calc(var(--18t-center-x) - 200px) !important; }
+#stepRoot2.step18t, .arrow18t[id^="arrow2_"], .arrow18t-rev[id^="arrow2_"] { top: calc(var(--18t-center-y) - 150px) !important; left: calc(var(--18t-center-x) - 100px) !important; }
+#stepRoot3.step18t, .arrow18t[id^="arrow3_"], .arrow18t-rev[id^="arrow3_"] { top: calc(var(--18t-center-y) -  50px) !important; left: calc(var(--18t-center-x) - 300px) !important; }
+#stepRoot4.step18t, .arrow18t[id^="arrow4_"], .arrow18t-rev[id^="arrow4_"] { top: calc(var(--18t-center-y) -  50px) !important; left: calc(var(--18t-center-x) - 100px) !important; }
+#stepRoot5.step18t, .arrow18t[id^="arrow5_"], .arrow18t-rev[id^="arrow5_"] { top: calc(var(--18t-center-y) +  50px) !important; left: calc(var(--18t-center-x) - 300px) !important; }
+#stepRoot6.step18t, .arrow18t[id^="arrow6_"], .arrow18t-rev[id^="arrow6_"] { top: calc(var(--18t-center-y) +  50px) !important; left: calc(var(--18t-center-x) - 200px) !important; }
+#stepRoot7.step18t, .arrow18t[id^="arrow7_"], .arrow18t-rev[id^="arrow7_"] { top: calc(var(--18t-center-y) +  50px) !important; left: calc(var(--18t-center-x) - 100px) !important; }
+
+#stepRoot8.step18t, .arrow18t[id^="arrow8_"], .arrow18t-rev[id^="arrow8_"] { top: calc(var(--18t-center-y) - 50px) !important; left: calc(var(--18t-center-x) - 0px) !important; }
+
+#stepRoot9.step18t, .arrow18t[id^="arrow9_"],  .arrow18t-rev[id^="arrow9_"]  { top: calc(var(--18t-center-y) - 150px) !important; left: calc(var(--18t-center-x) + 100px) !important; }
+#stepRoot10.step18t, .arrow18t[id^="arrow10_"], .arrow18t-rev[id^="arrow10_"] { top: calc(var(--18t-center-y) - 150px) !important; left: calc(var(--18t-center-x) + 200px) !important; }
+#stepRoot11.step18t, .arrow18t[id^="arrow11_"], .arrow18t-rev[id^="arrow11_"] { top: calc(var(--18t-center-y) - 150px) !important; left: calc(var(--18t-center-x) + 300px) !important; }
+#stepRoot12.step18t, .arrow18t[id^="arrow12_"], .arrow18t-rev[id^="arrow12_"] { top: calc(var(--18t-center-y) -  50px) !important; left: calc(var(--18t-center-x) + 100px) !important; }
+#stepRoot13.step18t, .arrow18t[id^="arrow13_"], .arrow18t-rev[id^="arrow13_"] { top: calc(var(--18t-center-y) -  50px) !important; left: calc(var(--18t-center-x) + 200px) !important; }
+#stepRoot14.step18t, .arrow18t[id^="arrow14_"], .arrow18t-rev[id^="arrow14_"] { top: calc(var(--18t-center-y) -  50px) !important; left: calc(var(--18t-center-x) + 300px) !important; }
+#stepRoot15.step18t, .arrow18t[id^="arrow15_"], .arrow18t-rev[id^="arrow15_"] { top: calc(var(--18t-center-y) +  50px) !important; left: calc(var(--18t-center-x) + 100px) !important; }
+#stepRoot16.step18t, .arrow18t[id^="arrow16_"], .arrow18t-rev[id^="arrow16_"] { top: calc(var(--18t-center-y) +  50px) !important; left: calc(var(--18t-center-x) + 200px) !important; }
+#stepRoot17.step18t, .arrow18t[id^="arrow17_"], .arrow18t-rev[id^="arrow17_"] { top: calc(var(--18t-center-y) +  50px) !important; left: calc(var(--18t-center-x) + 300px) !important; }
+
+/* リバースなしのアニメーション設定 */
+.arrow18t {
+  animation-name: scale-18t;
+  animation-timing-function: linear, step-end;
+  animation-fill-mode: forwards;
+  opacity: 1;
+}
+
+@keyframes scale-18t {
+  0% {
+    transform: scale(var(--18t-max-scale));
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* リバースありのアニメーション設定 */
+.arrow18t-rev {
+  animation-name: scale-18t-rev;
+  animation-timing-function: linear, step-end;
+  animation-fill-mode: forwards;
+  opacity: 1;
+}
+
+@keyframes scale-18t-rev {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(2);
+  }
+}

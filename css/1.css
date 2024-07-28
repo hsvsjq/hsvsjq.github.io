@@ -1,0 +1,44 @@
+
+
+:root {
+  --arrow-end-x: 0px; 
+  --arrow-end-y: 0px; 
+  --arrow-start-x: 0px; 
+  --arrow-start-y: 0px; 
+}
+
+
+
+/*move this to the js ↓*/
+/*-15 (a random number i thought was good) because for some reason the image is lightly tilted to the top left*/
+#stepHit0 { top: -15px !important; left: -15px !important; }
+[id^="arrow0_"] { top: 0px !important; left: 0px !important; }
+
+.arrowMoviment {
+  animation-name: arrow-moviment;
+  animation-timing-function: linear, step-end;
+  animation-fill-mode: forwards;
+}
+
+@keyframes arrow-moviment {
+  0%   {transform: translate(var(--arrow-start-x) , var(--arrow-start-y));}
+  100% {transform: translate(var(--arrow-end-x)   , var(--arrow-end-y));}
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #888;
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  margin-left:-50px;
+  transform: rotateY(0deg) translateX(-100px) rotateY(0deg);
+  display: inline-block;
+  animation: moveAndGlow 2s infinite linear;
+}
+
+@keyframes moveAndGlow {
+  to{  transform:rotateY(360deg) translateX(-100px) rotateY(-360deg); }
+}
