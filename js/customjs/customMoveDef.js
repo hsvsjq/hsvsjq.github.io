@@ -49,6 +49,8 @@ var currentArrowAnimationsId = 0;
 var currentArrowAnimations = [];
 var currentArrowAnimationsDivs = [];
 
+var currentStyles = [];
+
 var events = [];
 var currentEventsId = 0;
 var currentEvents = new Map();
@@ -91,7 +93,6 @@ function onFrameUpdate(){
 
 	//check for events
 	while(events[currentEventsId] && g_scoreObj.baseFrame >= events[currentEventsId].frame){
-		console.log("frame", events[currentEventsId].frame)
 
 		events[currentEventsId].data.forEach(event => {
 			if(event.duration <= 0) { event.duration = 1 };
@@ -129,87 +130,17 @@ function onFrameUpdate(){
 }
 
 function changeArrowAnimation(aa){	
-	if(aa.relativeElement){
-		//todo: check cause of frznote afterhit and arrow weird positioning when starting midsong
 
-		//place an observer to destroy the old arrowAnimationDiv when it loses all children
-/* 	
-		if(currentArrowAnimationsDivs[aa.key]){
-			if(!currentArrowAnimationsDivs[aa.key].hasChildNodes()){
-				currentArrowAnimationsDivs[aa.key].remove()
-			}else{
-				const hasChildrenObserver = new MutationObserver(
-					(mutationList, observer) => {
-						if(!mutationList[0].target.hasChildNodes()){
-							mutationList[0].target.parentNode.removeChild(mutationList[0].target);
-						}
-					}
-				)
-				hasChildrenObserver.observe(currentArrowAnimationsDivs[aa.key], {childList: true});
-			}
-		}
-		rtnDiv = document.createElement("div");
-		aa.relativeElement.appendChild(rtnDiv);
+	stepRootDivs[aa.key].root.appendChild(stepRootDivs[aa.key].arrowContainer);
+	destroyWhenChildless(stepRootDivs[aa.key].arrowContainer);
 
-		r = -degreesToRadians(aa.rotation);
+	arrowDiv = createArrowContainerDiv(aa.key);
+	stepRootDivs[aa.key].arrowContainer = arrowDiv;
+	stepRootDivs[aa.key].rtn.appendChild(arrowDiv);
+	stepRootDivs[aa.key].rtn.style.transform = `rotate(${aa.rotation}deg)`;
 
-		rtnDiv.style.transform = `rotate(${aa.rotation}deg)`;
-		rtnDiv.style.left = "0px";
-		rtnDiv.style.top = "0px";
-		rtnDiv.style.position = "absolute" 
-
-		upScrollDiv = document.createElement("div");
-		rtnDiv.appendChild(upScrollDiv);
-		upScrollDiv.style.left = "0px";
-		upScrollDiv.style.top = "0px"; //todo offset the y position to make the absolute end position of the arrow 0px of the rtnDiv
-		upScrollDiv.style.position = "absolute"
-		
-		downScrollDiv = document.createElement("div");
-		rtnDiv.appendChild(downScrollDiv);
-		downScrollDiv.style.left = "0px";
-		downScrollDiv.style.top = "0px"; //todo offset the y position to make the absolute end position of the arrow 0px of the rtnDiv
-		downScrollDiv.style.position = "absolute"
-
-		currentArrowAnimationsDivs[aa.key] = { up: upScrollDiv, down: downScrollDiv };
- */
-		//because of main line 10715
-		//  the position of the stepRootN is important so 
-		//  use another div for the position of the event objects?
-		//    maybe this isnt good?? ↑
-		//    use a singleton div for all events
-		//    only for steproots??
-
-		//var baseY = C_STEP_Y + g_posObj.reverseStepY * g_workObj.scrollDir[aa.key];
-
-		
-
-		//main line 10619
-		//  delete frz logic
-
-		/* 
-		//remove 'px' and convert to float
-		//invert signal to offset the original position (effectively making the coordinates equal to the ArrowSprite's)
-		x = -parseFloat(aa.relativeElement.style.left.slice(0, -2));
-		y = -parseFloat(aa.relativeElement.style.top.slice(0, -2));
-		//rotate the coordinates
-		xx = (x * Math.cos(r) + y * Math.sin(r));
-		yy = (-x * Math.sin(r) + y * Math.cos(r));
-
-		console.log(aa.key, x, y, xx, yy)
-
- 		newDiv.style.left = `${xx}px`;
-		newDiv.style.top = `${yy}px`;
-		newDiv.style.position = "absolute" 
-		currentArrowAnimationsDivs[aa.key] = newDiv;
-		 */
-	}else{
-		stepRootDivs[aa.key].root.appendChild(stepRootDivs[aa.key].arrowContainer);
-		destroyWhenChildless(stepRootDivs[aa.key].arrowContainer);
-
-		arrowDiv = createArrowContainerDiv(aa.key);
-		stepRootDivs[aa.key].arrowContainer = arrowDiv;
-		stepRootDivs[aa.key].rtn.appendChild(arrowDiv);
-		stepRootDivs[aa.key].rtn.style.transform = `rotate(${aa.rotation}deg)`;
+	if(aa.style){
+		currentStyles[aa.key].textContent = `[id^="arrow${aa.key}_"] ${aa.style}`;
 	}
 
 	//console.log(aa)
@@ -241,6 +172,48 @@ function destroyWhenChildless(element){
 		)
 		hasChildrenObserver.observe(element, {childList: true});
 	}
+}
+
+function createArrowObserver(){
+
+	//maybe theres an easier way to find the arrival frame
+	arrivalFrame = g_workObj.mkArrow.find(f => f != null)[0].arrivalFrame
+
+	//observe arrow creation
+	document.querySelectorAll('[id^=arrowSprite]').forEach(x => {
+		const arrowCreationObserver = new MutationObserver(
+			(mutationList, observer) => {
+				for(const mutation of mutationList){
+					mutation.addedNodes.forEach((node, key, parent) => {
+						d = arrivalFrame * 50 / 3;
+						k = parseInt(node.id.match(/^(arrow|frz)([0-9]+)_.*/)[2]);
+						
+						//rotate arrow/frzArrow components
+						if(currentArrowAnimations[k].rotation != 0){
+							node.childNodes.forEach(x => {
+								if(x.id.substring(0, 6) != "frzBar"){
+									r = isNaN(g_workObj.arrowRtn[k]) ? 0 : g_workObj.arrowRtn[k];
+									x.style.transform = x.style.transform.replace(/rotate\((-)?[0-9]+(deg)?\)/, `rotate(${r - currentArrowAnimations[k].rotation}deg)`);
+								}
+							});
+						}	
+
+						//the same offset to y bv top left
+						node.style.setProperty("left", "0px", "important");
+						stepRootDivs[k].arrowContainer.appendChild(node);
+
+
+						if(d && currentArrowAnimations[k].animation){ 
+							node.animate(currentArrowAnimations[k].animation, d) 
+						}
+						
+					})
+				} 
+			}
+		);
+
+		arrowCreationObserver.observe(x, {childList: true});
+	})
 }
 
 function customMoveBase(){
@@ -286,58 +259,16 @@ function customMoveInit(){
 	//reset current event and arrow animation index
 	if(!scoreIdsWithMoviment.includes(g_stateObj.scoreId)) return;
 	
+	keyCount = g_workObj.keyCtrl.length;
 	currentArrowAnimationsId = 0;
-	currentArrowAnimations = [];
+	currentArrowAnimations = [...Array(keyCount).keys()].map(x => { return { key: x, rotation: 0} });
 	currentArrowAnimationsDivs = [];
 	currentEventsId = 0;
 	currentEvents.clear()
+	currentStyles = [...Array(keyCount).keys()].map(() => document.createElement("style"));
+	currentStyles.forEach(x => stepRootDivs[0].pos.appendChild(x))
 
-	//maybe theres an easier way to find the arrival frame
-	arrivalFrame = g_workObj.mkArrow.find(f => f != null)[0].arrivalFrame
-
-
-	//observe arrow creation
-	document.querySelectorAll('[id^=arrowSprite]').forEach(x => {
-		const arrowCreationObserver = new MutationObserver(
-			(mutationList, observer) => {
-				for(const mutation of mutationList){
-					mutation.addedNodes.forEach((node, key, parent) => {
-						d = arrivalFrame * 50 / 3;
-						k = parseInt(node.id.match(/^(arrow|frz)([0-9]+)_.*/)[2]);
-						
-						//rotate arrow/frzArrow components
-						node.childNodes.forEach(x => {
-							if(x.id.substring(0, 6) != "frzBar"){
-								r = isNaN(g_workObj.arrowRtn[k]) ? 0 : g_workObj.arrowRtn[k];
-								x.style.transform = x.style.transform.replace(/rotate\((-)?[0-9]+(deg)?\)/, `rotate(${r - currentArrowAnimations[k].rotation}deg)`);
-							}
-						});
-
-						//the same offset to y bv top left
-						node.style.setProperty("left", "0px", "important");
-						stepRootDivs[k].arrowContainer.appendChild(node);
-						//todo: fix this ↓ and check if its still necessary
-						//currentArrowAnimations[k].relativeElement.appendChild(node); 
-						//currentArrowAnimationsDivs[k].appendChild(node); 
-
-						//todo: test animations
-
-						//if(currentArrowAnimations[k].style){ node.style = currentArrowAnimations[k].style; }
-						//placing styles this way to allow the use of 'important' priority
-						if(currentArrowAnimations[k].style){
-							currentArrowAnimations[k].style.forEach(a => node.style.setProperty(a.name, a.value, a.priority ?? ""))
-						}
-
-						if(d && currentArrowAnimations[k].animation){ 
-							node.animate(currentArrowAnimations[k].animation, { duration: d, easing: "linear"}) 
-						}
-					})
-				} 
-			}
-		);
-
-		arrowCreationObserver.observe(x, {childList: true});
-	})
+	createArrowObserver();
 
 	//put frzHitN inside stepRootN to make them move together
 	document.querySelectorAll('[id^=frzHit]').forEach(x => {
