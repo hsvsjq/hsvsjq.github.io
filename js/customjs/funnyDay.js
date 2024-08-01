@@ -40,16 +40,6 @@ doOnMainInit.push(() => setCustomMove(
       scoreId: 0,
       data: [
         {
-          frame: 0,
-          arrowAnimations: 
-            [...Array(9).keys()].map(i => {
-              return { 
-                key: i,
-                rotation: 0,
-              }
-            }),
-        },
-        {
           frame: 2192,
           events: [
             { elements: [stepRootDivs[0].pos], style: { left: { from: 0, to: nDistance,            func: fromTo, suffix: "px" }, }, duration: 29, },
@@ -64,10 +54,10 @@ doOnMainInit.push(() => setCustomMove(
           frame: 4096,
 
           arrowAnimations: [
-            { key: 0, rotation: 90 * reverse },
-            { key: 1, rotation: 90 - 90 * reverse },
-            { key: 2, rotation: 90 + 90 * reverse },
-            { key: 3, rotation: -90 * reverse },
+            { keys: [0], rotation: 90 * reverse },
+            { keys: [1], rotation: 90 - 90 * reverse },
+            { keys: [2], rotation: 90 + 90 * reverse },
+            { keys: [3], rotation: -90 * reverse },
           ],
           
           events: [
@@ -89,10 +79,7 @@ doOnMainInit.push(() => setCustomMove(
         {
           frame: 4988,
           arrowAnimations: [
-            { key: 0, rotation: 90 + 90 * reverse },
-            { key: 1, rotation: 90 + 90 * reverse },
-            { key: 2, rotation: 90 + 90 * reverse },
-            { key: 3, rotation: 90 + 90 * reverse },
+            { keys: [0,1,2,3], rotation: 90 + 90 * reverse },
           ],
           events: [
             { elements: [stepRootDivs[0].pos], style: { left: { from: nDistance,              to: 0, func: fromTo, suffix: "px" },
@@ -128,15 +115,7 @@ doOnMainInit.push(() => setCustomMove(
         {
           frame: 6030,
           arrowAnimations: [
-            { key: 0, rotation: 90 - 90 * reverse },
-            { key: 1, rotation: 90 - 90 * reverse },
-            { key: 2, rotation: 90 - 90 * reverse },
-            { key: 3, rotation: 90 - 90 * reverse },
-            { key: 4, rotation: 90 - 90 * reverse },
-            { key: 5, rotation: 90 - 90 * reverse },
-            { key: 6, rotation: 90 - 90 * reverse },
-            { key: 7, rotation: 90 - 90 * reverse },
-            { key: 8, rotation: 90 - 90 * reverse },
+            { keys: [0,1,2,3,4,5,6,7,8], rotation: 90 - 90 * reverse },
           ],
         },
         {
@@ -183,28 +162,20 @@ doOnMainInit.push(() => setCustomMove(
             },
           ],
           arrowAnimations: [
-            { key: 0, rotation: 90 },
-            { key: 1, rotation: 0 },
-            { key: 2, rotation: 180 },
-            { key: 3, rotation: -90 },
-            { key: 5, rotation: 90 },
-            { key: 6, rotation: 0 },
-            { key: 7, rotation: 180 },
-            { key: 8, rotation: -90 },
+            { keys: [0], rotation: 90 },
+            { keys: [1], rotation: 0 },
+            { keys: [2], rotation: 180 },
+            { keys: [3], rotation: -90 },
+            { keys: [5], rotation: 90 },
+            { keys: [6], rotation: 0 },
+            { keys: [7], rotation: 180 },
+            { keys: [8], rotation: -90 },
           ],
         },
         {
           frame: 7904,
           arrowAnimations: [
-            { key: 0, rotation: 90 + 90 * reverse },
-            { key: 1, rotation: 90 + 90 * reverse },
-            { key: 2, rotation: 90 + 90 * reverse },
-            { key: 3, rotation: 90 + 90 * reverse },
-            { key: 4, rotation: 90 + 90 * reverse },
-            { key: 5, rotation: 90 + 90 * reverse },
-            { key: 6, rotation: 90 + 90 * reverse },
-            { key: 7, rotation: 90 + 90 * reverse },
-            { key: 8, rotation: 90 + 90 * reverse },
+            { keys: [0,1,2,3,4,5,6,7,8], rotation: 90 + 90 * reverse },
           ],
           events: [
             { elements: [

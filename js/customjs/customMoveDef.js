@@ -131,21 +131,22 @@ function onFrameUpdate(){
 
 function changeArrowAnimation(aa){	
 
-	stepRootDivs[aa.key].root.appendChild(stepRootDivs[aa.key].arrowContainer);
-	destroyWhenChildless(stepRootDivs[aa.key].arrowContainer);
+	aa.keys.forEach(k => {
+		stepRootDivs[k].root.appendChild(stepRootDivs[k].arrowContainer);
+		destroyWhenChildless(stepRootDivs[k].arrowContainer);
+	
+		arrowDiv = createArrowContainerDiv(k);
+		stepRootDivs[k].arrowContainer = arrowDiv;
+		stepRootDivs[k].rtn.appendChild(arrowDiv);
+		stepRootDivs[k].rtn.style.transform = `rotate(${aa.rotation}deg)`;
+	
+		if(aa.style){
+			currentStyles[k].textContent = `[id^="arrow${k}_"] ${aa.style}`;
+		}
+	
+		currentArrowAnimations[k] = aa;
+	})
 
-	arrowDiv = createArrowContainerDiv(aa.key);
-	stepRootDivs[aa.key].arrowContainer = arrowDiv;
-	stepRootDivs[aa.key].rtn.appendChild(arrowDiv);
-	stepRootDivs[aa.key].rtn.style.transform = `rotate(${aa.rotation}deg)`;
-
-	if(aa.style){
-		currentStyles[aa.key].textContent = `[id^="arrow${aa.key}_"] ${aa.style}`;
-	}
-
-	//console.log(aa)
-
-	currentArrowAnimations[aa.key] = aa;
 }
 
 function createArrowContainerDiv(key){
@@ -261,12 +262,12 @@ function customMoveInit(){
 	
 	keyCount = g_workObj.keyCtrl.length;
 	currentArrowAnimationsId = 0;
-	currentArrowAnimations = [...Array(keyCount).keys()].map(x => { return { key: x, rotation: 0} });
+	currentArrowAnimations = [...Array(keyCount).keys()].map(x => { return { keys: [x], rotation: 0} });
 	currentArrowAnimationsDivs = [];
 	currentEventsId = 0;
 	currentEvents.clear()
 	currentStyles = [...Array(keyCount).keys()].map(() => document.createElement("style"));
-	currentStyles.forEach(x => stepRootDivs[0].pos.appendChild(x))
+	[...Array(keyCount).keys()].forEach(k => stepRootDivs[k].pos.appendChild(currentStyles[k]))
 
 	createArrowObserver();
 

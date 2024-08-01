@@ -22,16 +22,6 @@ doOnMainInit.push(() => setCustomMove(
       scoreId: 0,
       data: [
         {
-          frame: 0,
-          arrowAnimations: [
-            { key: 0,  rotation: 0 },
-            { key: 1,  rotation: 0 },
-            { key: 2,  rotation: 0 },
-            { key: 3,  rotation: 0 },
-            { key: 4,  rotation: 0 },
-          ],
-        },
-        {
           frame: 1861,
           events: [
             { elements: [stepRootDivs[arrowId[0]].pos], 
@@ -52,10 +42,10 @@ doOnMainInit.push(() => setCustomMove(
             }, duration: 111, },
           ],
           arrowAnimations: [
-            { key: arrowId[0],  rotation: 90 + 180 * reverse },
-            { key: arrowId[1],  rotation: 0 + 180 * reverse },
-            { key: arrowId[2],  rotation: 180 + 180 * reverse },
-            { key: arrowId[3],  rotation: 270 + 180 * reverse },
+            { keys: [arrowId[0]],  rotation: 90 + 180 * reverse },
+            { keys: [arrowId[1]],  rotation: 0 + 180 * reverse },
+            { keys: [arrowId[2]],  rotation: 180 + 180 * reverse },
+            { keys: [arrowId[3]],  rotation: 270 + 180 * reverse },
           ],
         },
         {
@@ -79,10 +69,7 @@ doOnMainInit.push(() => setCustomMove(
             }, duration: 111, },
           ],
           arrowAnimations: [
-            { key: arrowId[0],  rotation: 180 },
-            { key: arrowId[1],  rotation: 180 },
-            { key: arrowId[2],  rotation: 180 },
-            { key: arrowId[3],  rotation: 180 },
+            { keys: [arrowId[0],arrowId[1],arrowId[2],arrowId[3]],  rotation: 180 },
           ],
         }
       ]
