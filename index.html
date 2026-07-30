@@ -348,11 +348,16 @@
 			const h = `hsl(${Date.now() / 1000 % 360}, 27%, 65%)`
 			document.getElementById('bg').style.background = `radial-gradient(circle at top right, #FFFFFF, transparent 15%), ${h}`;
 			document.body.style.backgroundColor = h;
+			document.documentElement.style.scrollbarColor = `${h} white`
 			setTimeout(setBgColor, 2000);
 		}
 		setBgColor()
 	</script>
 	<style>
+		html {
+			transition: scrollbar-color 2s;
+		}
+
 		body {
 			margin: 0px;
 			transition: background-color 2s;
