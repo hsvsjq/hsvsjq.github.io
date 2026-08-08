@@ -87,11 +87,11 @@ function customOptionInit() {
   // create follow cursor setting
   const sprite = setSpriteList({ followCursor: { heightPos: 13.5, y: 0, dw: 0, dh: 0 } });
 
-  g_settings.followCursors = [C_FLG_OFF, C_FLG_A_BOX_WIDTH, C_FLG_BOX_WIDTH, C_FLG_SCREEN_WIDTH];
+  g_settings.followCursors = [C_FLG_OFF, C_FLG_BOX_WIDTH, C_FLG_A_BOX_WIDTH, C_FLG_SCREEN_WIDTH];
 
   g_lblNameObj.FollowCursor = "FollowCursor"
 
-  g_stateObj.followCursor = g_localStorage["followCursor"] ?? C_FLG_A_BOX_WIDTH;
+  g_stateObj.followCursor = g_localStorage["followCursor"] ?? C_FLG_OFF;
   g_settings.followCursorNum = roundZero(g_settings.followCursors.findIndex(followCursor => followCursor === g_stateObj.followCursor));
 
   createGeneralSetting(sprite.followCursor, `followCursor`, {
