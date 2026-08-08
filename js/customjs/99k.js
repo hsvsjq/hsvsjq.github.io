@@ -294,7 +294,8 @@ function getPlayerGuidanceFunc(data) {
 const KDG_LOOP_COUNT = 7
 const KDG_CHARA_ARR = ['g', 'l', 'd', 'u', 'r', 'll', 'dd', 'uu', 'rr', 'i', 'lll', 'ddd', 'uuu', 'rrr']
 const KDG_COLOR_ARR = [2, 0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 3, 3, 3]
-const KDG_CTRL_ARR = ['Tab/Shift', 'S', 'D', 'E/R', 'F', 'G', 'H', 'Y/U', 'J', 'Enter', 'Left', 'Down', 'Up', 'Right']
+const _KDG_CTRL_ARR = ['Tab/Shift', 'S', 'D', 'E/R', 'F', 'G', 'H', 'Y/U', 'J', 'Enter', 'Left', 'Down', 'Up', 'Right']
+const KDG_CTRL_ARR = ['Tab/Shift', 'S', 'D', 'E/R', 'F', 'J', 'K', 'I/O', 'L', 'Enter', 'Left', 'Down', 'Up', 'Right']
 const KDG_RTN_ARR = ['giko', '0', '-90', '90', '180', '0', '-90', '90', '180', 'iyo', '0', '-90', '90', '180']
 const KDG_SHUFFLE_ARR = [1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 5, 5, 5, 5]
 
@@ -324,3 +325,5 @@ function generateKeyDefinition() {
   |shuffle${__key}=${shuffle}|
   `
 }
+
+console.log(generateKeyDefinition())
