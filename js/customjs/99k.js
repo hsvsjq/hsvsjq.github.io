@@ -325,5 +325,3 @@ function generateKeyDefinition() {
   |shuffle${__key}=${shuffle}|
   `
 }
-
-console.log(generateKeyDefinition())
